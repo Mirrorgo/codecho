@@ -1,10 +1,6 @@
+ English | [中文](README.zh.md)
+
 # Codecho
-
-<p align="right">
-  <a href="README.zh.md">中文</a>
-</p>
-
-## Codecho
 
 > 💡 **Codecho** is an open-source code snippet library that provides developers with a wide range of reusable snippets. Simply copy and paste to integrate them into your project with ease!
 

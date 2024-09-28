@@ -1,10 +1,6 @@
+[English](README.md) | [中文]
+
 # Codecho
-
-<p align="right">
-  <a href="README.md">English</a>
-</p>
-
-## Codecho
 
 > 💡 **Codecho** 是一个开源代码片段库，为开发者提供了丰富的代码片段。只需复制粘贴，即可轻松集成到您的项目中！
 
