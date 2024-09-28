@@ -4,7 +4,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { AlignJustify, Github, Languages, Linkedin } from "lucide-react";
+import { AlignJustify, Github, Languages } from "lucide-react";
 
 import { Separator } from "@/components/ui/separator";
 import { Fragment } from "react";

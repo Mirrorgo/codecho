@@ -1,8 +1,8 @@
+import MDXContent from "@/mdx/Test.mdx";
 import { Icons } from "../../components/icons";
 import { Button, buttonVariants } from "../../components/ui/button";
 import { siteConfig } from "../../config/site";
 import { cn } from "../../lib/utils";
-import Test from "@/pages/Test.mdx";
 function Demo() {
   return (
     <div>
@@ -26,7 +26,7 @@ function Demo() {
           </a>
         </div>
       </div>
-      <Test />
+      <MDXContent />
     </div>
   );
 }

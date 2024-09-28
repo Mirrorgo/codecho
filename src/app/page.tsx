@@ -1,14 +1,17 @@
-import { Separator } from "@/components/ui/separator";
-import MDXContent from "@/pages/React.mdx";
+import { Button } from "@/components/ui/button";
+import MDXContent from "@/mdx/React.mdx";
 import { Link } from "react-router-dom";
+
+const routes = ["test", "mdx", "demo"];
 
 function App() {
   return (
     <div>
-      React Introduction
-      <Link to="/snippets">Snippets</Link>
-      <Separator />
-      <Link to="/mdx">mdx</Link>
+      {routes.map((route) => (
+        <Link key={route} to={`/${route}`}>
+          <Button variant="link">{route}</Button>
+        </Link>
+      ))}
       <MDXContent />
     </div>
   );

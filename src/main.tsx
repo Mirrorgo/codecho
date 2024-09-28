@@ -6,8 +6,8 @@ import RootLayout from "./app/layout";
 import Demo from "./app/demo/page";
 import NotFound from "./app/not-found";
 import App from "./app/page";
-import MDXContent from "./pages/React.mdx";
 import { MDXWrapper } from "./components/mdx-wrapper";
+import MDXContent from "./mdx/React.mdx";
 
 const router = createBrowserRouter([
   {
@@ -20,7 +20,7 @@ const router = createBrowserRouter([
         element: <App />,
       },
       {
-        path: "snippets",
+        path: "test",
         element: <div>Test</div>,
       },
       {
