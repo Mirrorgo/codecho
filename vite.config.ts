@@ -9,6 +9,7 @@ export default defineConfig({
       enforce: "pre",
       ...mdx({
         /* jsxImportSource: …, otherOptions… */
+        providerImportSource: "@mdx-js/react",
       }),
     },
     react(),

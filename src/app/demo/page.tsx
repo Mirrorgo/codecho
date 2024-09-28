@@ -1,12 +1,11 @@
-import { Icons } from "./components/icons";
-import { Button, buttonVariants } from "./components/ui/button";
-import { siteConfig } from "./config/site";
-import { cn } from "./lib/utils";
-import Test from "./pages/Test.mdx";
-
-function App() {
+import { Icons } from "../../components/icons";
+import { Button, buttonVariants } from "../../components/ui/button";
+import { siteConfig } from "../../config/site";
+import { cn } from "../../lib/utils";
+import Test from "@/pages/Test.mdx";
+function Demo() {
   return (
-    <div className="flex justify-between">
+    <div>
       <div>
         <div>
           <Button>wow</Button>
@@ -32,4 +31,4 @@ function App() {
   );
 }
 
-export default App;
+export default Demo;
