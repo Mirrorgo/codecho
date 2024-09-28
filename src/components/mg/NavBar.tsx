@@ -30,7 +30,7 @@ const BrandLogo = () => (
   <Link to="/">
     <div className="text-xl font-bold cursor-pointer flex items-center mt-1">
       {/* 暂时没有icon */}
-      {/* <img src={"/logo.png"} alt={"logo"} width={30} height={30} /> */}
+      <img src={"/logo.png"} alt={"logo"} width={30} height={30} />
       <div>Codecho</div>
     </div>
   </Link>
