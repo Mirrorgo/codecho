@@ -1,50 +1,46 @@
-# React + TypeScript + Vite
+# Codecho
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+<p align="right">
+  <a href="#en" id="en-btn">English</a> | <a href="#zh" id="zh-btn">中文</a>
+</p>
 
-Currently, two official plugins are available:
+<div id="en">
+  <!-- English content -->
+  ## Codecho
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+  > 💡 **Codecho** is an open-source code snippet library that provides developers with a wide range of reusable snippets. Simply copy and paste to integrate them into your project with ease!
 
-## Expanding the ESLint configuration
+  ## 🖥️ Live Preview
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+  Check out [Codecho](https://codecho.vercel.app/) to see live demos of the snippets in action.
 
-- Configure the top-level `parserOptions` property like this:
+  ## 📄 License
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+  This project is licensed under the [MIT License](LICENSE).
+</div>
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+<div id="zh" style="display:none;">
+  <!-- 中文内容 -->
+  ## Codecho
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
+  > 💡 **Codecho** 是一个开源代码片段库，为开发者提供了丰富的代码片段。只需复制粘贴，即可轻松集成到您的项目中！
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
+  ## 🖥️ 在线预览
+
+  可以访问 [Codecho](https://codecho.vercel.app/) 查看代码片段的实际效果。
+
+  ## 📄 许可证
+
+  本项目基于 [MIT License](LICENSE) 进行开源。
+</div>
+
+<script>
+  document.getElementById('en-btn').onclick = function() {
+    document.getElementById('en').style.display = 'block';
+    document.getElementById('zh').style.display = 'none';
+  };
+  document.getElementById('zh-btn').onclick = function() {
+    document.getElementById('en').style.display = 'none';
+    document.getElementById('zh').style.display = 'block';
+  };
+</script>
