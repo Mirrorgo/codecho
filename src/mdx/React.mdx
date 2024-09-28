@@ -81,28 +81,6 @@ const UncontrolledCounter: React.FC = () => {
 export default UncontrolledCounter;
 ```
 
-### 使用示例
-
-你可以在主应用中使用这两个组件：
-
-```tsx
-import React from 'react';
-import ControlledCounter from './ControlledCounter';
-import UncontrolledCounter from './UncontrolledCounter';
-
-const App: React.FC = () => {
-  return (
-    <div className="p-4">
-      <h1 className="text-xl mb-4">受控与非受控数字输入示例</h1>
-      <ControlledCounter />
-      <UncontrolledCounter />
-    </div>
-  );
-};
-
-export default App;
-```
-
 ### 说明
 
 - **受控组件**允许用户输入数字并通过按钮将其增加 1。每次用户输入都会更新状态。

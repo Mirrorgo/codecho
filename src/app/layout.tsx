@@ -8,7 +8,7 @@ function RootLayout() {
       <header>
         <NavBar />
       </header>
-      <main className="max-w-xl mx-auto sm:max-w-2xl md:max-w-3xl lg:max-w-4xl xl:max-w-5xl">
+      <main className="max-w-xl mx-auto px-4 sm:max-w-2xl md:max-w-3xl lg:max-w-4xl xl:max-w-5xl">
         <Outlet />
       </main>
     </ThemeProvider>
