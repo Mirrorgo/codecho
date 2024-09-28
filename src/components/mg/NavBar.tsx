@@ -59,17 +59,9 @@ function NavBar() {
           </div>
           <div className="flex items-center gap-2">
             <div className="flex items-center">
+              {/* TODO: 改成实际仓库和star数 */}
               <a
-                href="https://www.linkedin.com/in/mirrorgo/"
-                target="_blank"
-                rel="noopener noreferrer" // 推荐与 target="_blank" 一起使用，以提高安全性
-              >
-                <Button size="icon" variant="ghost" className="rounded-full">
-                  <Linkedin size={18} />
-                </Button>
-              </a>
-              <a
-                href="https://github.com/Mirrorgo"
+                href="https://github.com/Mirrorgo/codecho"
                 target="_blank"
                 rel="noopener noreferrer" // 推荐与 target="_blank" 一起使用，以提高安全性
               >
@@ -111,17 +103,7 @@ function NavBar() {
               </DropdownMenuItem>
               <div className="flex">
                 <a
-                  href="https://www.linkedin.com/in/mirrorgo/"
-                  target="_blank"
-                  rel="noopener noreferrer" // 推荐与 target="_blank" 一起使用，以提高安全性
-                >
-                  <Button size="icon" variant="ghost" className="rounded-full">
-                    <Linkedin size={18} />
-                  </Button>
-                </a>
-
-                <a
-                  href="https://github.com/Mirrorgo"
+                  href="https://github.com/Mirrorgo/codecho"
                   target="_blank"
                   rel="noopener noreferrer" // 推荐与 target="_blank" 一起使用，以提高安全性
                 >
