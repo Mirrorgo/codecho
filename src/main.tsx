@@ -7,7 +7,7 @@ import Demo from "./app/demo/page";
 import NotFound from "./app/not-found";
 import App from "./app/page";
 import { MDXWrapper } from "./components/mdx-wrapper";
-import MDXContent from "./mdx/React.mdx";
+import MDXContent from "./mdx/Mdx.mdx";
 
 const router = createBrowserRouter([
   {
@@ -16,7 +16,7 @@ const router = createBrowserRouter([
     errorElement: <NotFound />,
     children: [
       {
-        index: true, // 默认route的
+        index: true, // 默认route
         element: <App />,
       },
       {

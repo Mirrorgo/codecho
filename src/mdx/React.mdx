@@ -1,15 +1,109 @@
-# test1
-## test2
-### Functional components
+import { CodeBlockWrapper } from '@/components/mg/code-block-wrapper';
+import ControlledCounter from './React/ControlledCounter';
+import UncontrolledCounter from './React/UncontrolledCounter';
 
-```jsx
-function MyComponent ({ name }) {
-  return <div className='message-box'>
-    Hello {name}
-  </div>
-}
+下面是一个更新后的受控组件和非受控组件的示例，允许用户输入数字并通过一个按钮将该数字增加 1。示例使用 React + TypeScript + Tailwind CSS。
+
+### 1. 受控组件 (Controlled Component)
+
+<ControlledCounter />
+
+{/* <CodeBlockWrapper> */}
+```tsx
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { FC, useState } from "react";
+
+const ControlledCounter: FC = () => {
+  const [value, setValue] = useState<number>(0);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newValue = parseInt(e.target.value, 10);
+    if (!isNaN(newValue)) setValue(newValue);
+  };
+
+  return (
+    <div className="flex gap-2 items-center">
+      <Input
+        type="number"
+        value={value}
+        onChange={handleChange}
+        placeholder="Enter number"
+        className="w-30"
+      />
+      <Button onClick={() => setValue((prev) => prev + 1)}>+1</Button>
+      <div>Current value: {value}</div>
+    </div>
+  );
+};
+
+export default ControlledCounter;
+```
+{/* </CodeBlockWrapper> */}
+
+
+### 2. 非受控组件 (Uncontrolled Component)
+<UncontrolledCounter/>
+
+```tsx
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { useRef, useState } from "react";
+
+const UncontrolledCounter: React.FC = () => {
+  const inputRef = useRef<HTMLInputElement>(null);
+  const [value, setValue] = useState<number>(0);
+
+  const increment = () => {
+    if (inputRef.current) {
+      const newValue = parseInt(inputRef.current.value, 10);
+      if (!isNaN(newValue)) {
+        setValue((prevValue) => prevValue + newValue);
+        inputRef.current.value = ""; // Clear the input field
+      }
+    }
+  };
+
+  return (
+    <div className="flex gap-2 items-center">
+      <Input
+        type="number"
+        ref={inputRef}
+        placeholder="Enter number"
+        className="w-30"
+      />
+      <Button onClick={increment}>+1</Button>
+      <div>Current value: {value}</div>
+    </div>
+  );
+};
+
+export default UncontrolledCounter;
 ```
 
-Functional components have no state. Also, their `props` are passed as the first parameter to a function.
+### 使用示例
 
-See: [Function and Class Components](https://reactjs.org/docs/components-and-props.html#functional-and-class-components)
+你可以在主应用中使用这两个组件：
+
+```tsx
+import React from 'react';
+import ControlledCounter from './ControlledCounter';
+import UncontrolledCounter from './UncontrolledCounter';
+
+const App: React.FC = () => {
+  return (
+    <div className="p-4">
+      <h1 className="text-xl mb-4">受控与非受控数字输入示例</h1>
+      <ControlledCounter />
+      <UncontrolledCounter />
+    </div>
+  );
+};
+
+export default App;
+```
+
+### 说明
+
+- **受控组件**允许用户输入数字并通过按钮将其增加 1。每次用户输入都会更新状态。
+- **非受控组件**允许用户输入数字并通过按钮将该输入的数字直接增加到当前值。使用 `ref` 来访问输入框的值，并在每次点击按钮后清空输入框。

@@ -5,8 +5,10 @@ import { Outlet } from "react-router-dom";
 function RootLayout() {
   return (
     <ThemeProvider defaultTheme="system" storageKey="vite-ui-theme">
-      <main className="min-h-screen">
+      <header>
         <NavBar />
+      </header>
+      <main className="max-w-xl mx-auto sm:max-w-2xl md:max-w-3xl lg:max-w-4xl xl:max-w-5xl">
         <Outlet />
       </main>
     </ThemeProvider>
