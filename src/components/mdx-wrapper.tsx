@@ -58,6 +58,9 @@ function TypographyP(props: PropsWithChildren) {
     <p className="leading-7 [&:not(:first-child)]:mt-6">{props.children}</p>
   );
 }
+function TypographyList(props: PropsWithChildren) {
+  return <ul className="mt-1 ml-6 list-disc [&>li]:mt-1">{props.children}</ul>;
+}
 
 // Components mapping for MDX
 const components: any = {
@@ -68,6 +71,7 @@ const components: any = {
   blockquote: TypographyBlockquote,
   p: TypographyP,
   code: CodeComponent,
+  ul: TypographyList,
 };
 
 // MDX Wrapper component

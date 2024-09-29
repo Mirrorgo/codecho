@@ -1,0 +1,99 @@
+# fetch API
+自己常用的封装fetch请求的代码, 处理get和post
+- get的数据都在params里面
+- post的数据都在body里面
+
+```ts
+type ApiResponse<T> = {
+  success: boolean;
+  code: number;
+  data: T;
+  msg: string;
+};
+
+// get
+export const getData = async <T>(
+  url: string,
+  params: Record<string, string | number> = {}
+): Promise<ApiResponse<T>> => {
+  const queryString = new URLSearchParams(
+    params as Record<string, string>
+  ).toString();
+  const response = await fetch(`${url}?${queryString}`, {
+    credentials: "include",
+  });
+
+  if (!response.ok) {
+    throw new Error(`Error: ${response.status}`);
+  }
+
+  const data: ApiResponse<T> = await response.json();
+  return data;
+};
+
+// post
+export const postData = async <T>(
+  url: string,
+  body: Record<string, any>
+): Promise<ApiResponse<T>> => {
+  const response = await fetch(url, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    credentials: "include",
+    body: JSON.stringify(body),
+  });
+
+  if (!response.ok) {
+    throw new Error(`Error: ${response.status}`);
+  }
+
+  const data: ApiResponse<T> = await response.json();
+  return data;
+};
+```
+
+
+用法
+```tsx
+type TodoItem = {
+  id: number;
+  task: string;
+  completed: boolean;
+}
+const [todos, setTodos] = useState<TodoItem[]>([]);
+const [loading, setLoading] = useState<boolean>(true);
+
+const fetchTodos = useCallback(async () => {
+	try {
+		setLoading(true);
+		const res = await getData<FundingApplication[]>(
+		"/api/todos/list",
+		{ id: id }
+		);
+		setTodos(res.data || []);
+	} catch (error) {
+		console.error("Error fetching todos:", error);
+	} finally {
+		setLoading(false);
+	}
+}, [id]);
+
+useEffect(() => {
+	fetchTodos();
+}, [fetchTodos]);
+
+const handleCreate = async (formData: TodoItem) => {
+	try {
+		const res = await postData(`/api/todos/add`, formData);
+		if (res.success) {
+		fetchTodos();
+		} else {
+		console.error("Create request failed:", res.msg);
+		}
+	} catch (error) {
+		console.error("Error making create request:", error);
+	}
+};
+  ```

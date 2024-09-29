@@ -11,6 +11,8 @@ import Mdx from "./mdx/Mdx.mdx";
 import Curring from "./mdx/Curring.mdx";
 import React from "./mdx/React.mdx";
 import Hoc from "./mdx/HOC.mdx";
+import Hooks from "./mdx/Hooks.mdx";
+import Fetch from "./mdx/Fetch.mdx";
 
 const router = createBrowserRouter([
   {
@@ -41,6 +43,14 @@ const router = createBrowserRouter([
       {
         path: "hoc",
         element: <Hoc />,
+      },
+      {
+        path: "hooks",
+        element: <Hooks />,
+      },
+      {
+        path: "fetch",
+        element: <Fetch />,
       },
     ],
   },

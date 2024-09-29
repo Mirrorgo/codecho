@@ -8,6 +8,8 @@ const routes = [
   { path: "react", displayText: "React" },
   { path: "curring", displayText: "柯里化" },
   { path: "hoc", displayText: "高阶组件" },
+  { path: "hooks", displayText: "hooks" },
+  { path: "fetch", displayText: "fetch" },
 ];
 
 function RootLayout() {
