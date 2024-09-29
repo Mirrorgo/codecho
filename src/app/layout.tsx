@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 const routes = [
   { path: "react", displayText: "React" },
   { path: "curring", displayText: "柯里化" },
+  { path: "hoc", displayText: "高阶组件" },
 ];
 
 function RootLayout() {

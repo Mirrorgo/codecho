@@ -10,6 +10,7 @@ import { MDXWrapper } from "./components/mdx-wrapper";
 import Mdx from "./mdx/Mdx.mdx";
 import Curring from "./mdx/Curring.mdx";
 import React from "./mdx/React.mdx";
+import Hoc from "./mdx/HOC.mdx";
 
 const router = createBrowserRouter([
   {
@@ -36,6 +37,10 @@ const router = createBrowserRouter([
       {
         path: "curring",
         element: <Curring />,
+      },
+      {
+        path: "hoc",
+        element: <Hoc />,
       },
     ],
   },

@@ -34,10 +34,10 @@ const ToggleButton: FC<ToggleButtonProps> = ({ isToggled, toggle }) => (
 // Using the higher-order component with an initial state of false
 const EnhancedToggleButton = withToggle(ToggleButton)(false);
 
-const Curring: FC = () => (
+const Hoc: FC = () => (
   <div>
     <EnhancedToggleButton />
   </div>
 );
 
-export default Curring;
+export default Hoc;

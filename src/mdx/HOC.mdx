@@ -1,0 +1,65 @@
+import Hoc from './HOC/Hoc.tsx'
+
+# 高阶组件（HOC）
+
+高阶组件（Higher-Order Component，HOC）是一个函数，它接受一个组件作为参数，并返回一个新的组件。HOC 通常用于复用组件逻辑，例如在多个组件之间共享状态或行为。通过柯里化，我们可以更加灵活地传递参数和状态，从而增强组件的可重用性。
+
+## 示例：高阶组件
+
+以下是一个简单的高阶组件示例，它为传入的组件添加了切换功能。
+
+<Hoc />
+
+### 组件结构
+
+- **withToggle HOC**：该高阶组件为符合 `WithToggleProps` 接口的任意组件添加了切换功能。它内部管理切换状态，并将该状态通过 props 传递给被包装的组件。
+  
+- **ToggleButton 组件**：该组件展示当前的切换状态（"ON" 或 "OFF"），并在点击时触发切换操作。
+
+### 代码示例
+
+```tsx
+import { Button } from "@/components/ui/button";
+import { useState, FC } from "react";
+
+type WithToggleProps = {
+  isToggled: boolean;
+  toggle: () => void;
+};
+
+// Higher-order component that adds toggle functionality
+const withToggle = (WrappedComponent: FC<WithToggleProps>) => {
+  return (initialState: boolean) => {
+    return () => {
+      const [isToggled, setToggle] = useState(initialState);
+
+      const toggle = () => setToggle((prev) => !prev);
+
+      return <WrappedComponent isToggled={isToggled} toggle={toggle} />;
+    };
+  };
+};
+
+// A simple button component
+type ToggleButtonProps = {
+  isToggled: boolean;
+  toggle: () => void;
+};
+
+const ToggleButton: FC<ToggleButtonProps> = ({ isToggled, toggle }) => (
+  <Button className="w-16" onClick={toggle}>
+    {isToggled ? "ON" : "OFF"}
+  </Button>
+);
+
+// Using the higher-order component with an initial state of false
+const EnhancedToggleButton = withToggle(ToggleButton)(false);
+
+const Hoc: FC = () => (
+  <div>
+    <EnhancedToggleButton />
+  </div>
+);
+
+export default Hoc;
+```
