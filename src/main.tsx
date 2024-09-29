@@ -7,7 +7,9 @@ import Demo from "./app/demo/page";
 import NotFound from "./app/not-found";
 import App from "./app/page";
 import { MDXWrapper } from "./components/mdx-wrapper";
-import MDXContent from "./mdx/Mdx.mdx";
+import Mdx from "./mdx/Mdx.mdx";
+import Curring from "./mdx/Curring.mdx";
+import React from "./mdx/React.mdx";
 
 const router = createBrowserRouter([
   {
@@ -20,8 +22,8 @@ const router = createBrowserRouter([
         element: <App />,
       },
       {
-        path: "test",
-        element: <div>Test</div>,
+        path: "react",
+        element: <React />,
       },
       {
         path: "demo",
@@ -29,7 +31,11 @@ const router = createBrowserRouter([
       },
       {
         path: "mdx",
-        element: <MDXContent />,
+        element: <Mdx />,
+      },
+      {
+        path: "curring",
+        element: <Curring />,
       },
     ],
   },

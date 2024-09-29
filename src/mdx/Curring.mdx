@@ -1,0 +1,110 @@
+import Curring from './Curring/Curring.tsx'
+
+以下是添加了工具函数柯里化的修改文案，包括柯里化的定义、示例和代码：
+
+---
+
+# 柯里化在 React 中的应用
+
+柯里化（Currying）是一种将接受多个参数的函数转换为一系列接受单个参数的函数的技术。在 React 中，柯里化的应用非常广泛，可以用于工具函数的柯里化，也可以用于高阶组件（HOC）的柯里化。
+
+## 什么是高阶组件（HOC）
+
+高阶组件（Higher-Order Component，HOC）是一个函数，它接受一个组件作为参数，并返回一个新的组件。HOC 通常用于复用组件逻辑，例如在多个组件之间共享状态或行为。通过柯里化，我们可以更加灵活地传递参数和状态，从而增强组件的可重用性。
+
+## 示例：高阶组件的柯里化
+
+以下是一个简单的高阶组件示例，它为传入的组件添加了切换功能。
+
+<Curring />
+
+### 组件结构
+
+- **withToggle HOC**：该高阶组件为符合 `WithToggleProps` 接口的任意组件添加了切换功能。它内部管理切换状态，并将该状态通过 props 传递给被包装的组件。
+  
+- **ToggleButton 组件**：该组件展示当前的切换状态（"ON" 或 "OFF"），并在点击时触发切换操作。
+
+### 代码示例
+
+```tsx
+import { Button } from "@/components/ui/button";
+import { useState, FC } from "react";
+
+type WithToggleProps = {
+  isToggled: boolean;
+  toggle: () => void;
+};
+
+// 高阶组件，添加切换功能
+const withToggle = (WrappedComponent: FC<WithToggleProps>) => {
+  return (initialState: boolean) => {
+    return () => {
+      const [isToggled, setToggle] = useState(initialState);
+
+      const toggle = () => setToggle((prev) => !prev);
+
+      return <WrappedComponent isToggled={isToggled} toggle={toggle} />;
+    };
+  };
+};
+
+// 简单的按钮组件
+type ToggleButtonProps = {
+  isToggled: boolean;
+  toggle: () => void;
+};
+
+const ToggleButton: FC<ToggleButtonProps> = ({ isToggled, toggle }) => (
+  <Button className="w-16" onClick={toggle}>
+    {isToggled ? "ON" : "OFF"}
+  </Button>
+);
+
+// 使用高阶组件，并设置初始状态为 false
+const EnhancedToggleButton = withToggle(ToggleButton)(false);
+
+const Curring: FC = () => (
+  <div>
+    <EnhancedToggleButton />
+  </div>
+);
+
+export default Curring;
+```
+
+## 工具函数的柯里化
+
+柯里化不仅可以用于高阶组件，还可以用于工具函数，使其在处理多参数时更加灵活。通过柯里化，我们可以逐步提供参数，从而使函数的使用更加灵活。
+
+### 柯里化函数示例
+
+以下是一个简单的柯里化工具函数示例：
+
+```tsx
+// 柯里化函数
+const currying = (fn: (...args: any[]) => any) => {
+  const curried = (...args: any[]) => {
+    if (args.length >= fn.length) {
+      return fn(...args);
+    } else {
+      return (...next: any[]) => curried(...args, ...next);
+    }
+  };
+  return curried;
+};
+
+// 示例函数：计算三个数字的和
+const sum = (a: number, b: number, c: number) => a + b + c;
+
+// 使用柯里化函数
+const curriedSum = currying(sum);
+
+// 逐步传递参数
+const result = curriedSum(1)(2)(3); // 输出：6
+
+console.log(result);
+```
+
+### 总结
+
+通过使用柯里化，我们能够灵活地创建高阶组件和工具函数。在构建可复用的 UI 组件时，柯里化提供了状态管理的便利；在处理多个参数的工具函数时，柯里化使得参数的传递更加灵活。这种模式不仅提升了组件和函数的复用性，也使得逻辑更加清晰和易于维护。
