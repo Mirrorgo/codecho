@@ -1,5 +1,7 @@
+import { Navigate } from "react-router-dom";
+
 function App() {
-  return <></>;
+  return <Navigate to="/react" />;
 }
 
 export default App;
