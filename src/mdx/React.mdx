@@ -2,9 +2,9 @@ import { CodeBlockWrapper } from '@/components/mg/code-block-wrapper';
 import ControlledCounter from './React/ControlledCounter';
 import UncontrolledCounter from './React/UncontrolledCounter';
 
-下面是一个更新后的受控组件和非受控组件的示例，允许用户输入数字并通过一个按钮将该数字增加 1
+# 受控组件和非受控组件
 
-### 1. 受控组件 (Controlled Component)
+## 1. 受控组件 (Controlled Component)
 
 <ControlledCounter />
 
@@ -42,7 +42,7 @@ export default ControlledCounter;
 {/* </CodeBlockWrapper> */}
 
 
-### 2. 非受控组件 (Uncontrolled Component)
+## 2. 非受控组件 (Uncontrolled Component)
 <UncontrolledCounter/>
 
 ```tsx
@@ -81,7 +81,7 @@ const UncontrolledCounter: React.FC = () => {
 export default UncontrolledCounter;
 ```
 
-### 说明
+## 说明
 
 - **受控组件**允许用户输入数字并通过按钮将其增加 1。每次用户输入都会更新状态。
 - **非受控组件**允许用户输入数字并通过按钮将该输入的数字直接增加到当前值。使用 `ref` 来访问输入框的值，并在每次点击按钮后清空输入框。

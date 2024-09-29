@@ -1,29 +1,76 @@
 import { FC, PropsWithChildren } from "react";
-// import CodeBlock from "./mg/code-block";
 import { MDXProvider } from "@mdx-js/react";
 import CodeBlock from "./mg/code-block";
 
-// 创建一个自定义 code 组件
+// Custom code component
 const CodeComponent: FC<any> = (props) => {
-  // 判断是否有 className 属性，如果有则是块级代码，否则是行内代码
+  // Check if className is present to determine if it's a block or inline code
   if (props.className) {
     return <CodeBlock {...props} />;
   }
-
-  // 行内代码保持原样显示
+  // Return inline code as is
   return <code {...props} />;
 };
 
-// const components: MDXComponents = {
-// 这个类型为什么总是解决不了?
+// Heading components with vertical spacing
+function TypographyH1(props: PropsWithChildren) {
+  return (
+    <h1 className="scroll-m-20 text-3xl font-extrabold tracking-tight lg:text-4xl my-6">
+      {props.children}
+    </h1>
+  );
+}
+
+function TypographyH2(props: PropsWithChildren) {
+  return (
+    <h2 className="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight my-4 first:mt-0">
+      {props.children}
+    </h2>
+  );
+}
+
+function TypographyH3(props: PropsWithChildren) {
+  return (
+    <h3 className="scroll-m-20 text-xl font-semibold tracking-tight my-3">
+      {props.children}
+    </h3>
+  );
+}
+
+function TypographyH4(props: PropsWithChildren) {
+  return (
+    <h4 className="scroll-m-20 text-lg font-semibold tracking-tight my-2">
+      {props.children}
+    </h4>
+  );
+}
+
+function TypographyBlockquote(props: PropsWithChildren) {
+  return (
+    <blockquote className="mt-6 border-l-2 pl-6 italic">
+      {props.children}
+    </blockquote>
+  );
+}
+
+function TypographyP(props: PropsWithChildren) {
+  return (
+    <p className="leading-7 [&:not(:first-child)]:mt-6">{props.children}</p>
+  );
+}
+
+// Components mapping for MDX
 const components: any = {
-  //   h1: "h2",
+  h1: TypographyH1,
+  h2: TypographyH2,
+  h3: TypographyH3,
+  h4: TypographyH4,
+  blockquote: TypographyBlockquote,
+  p: TypographyP,
   code: CodeComponent,
-  //   code(properties) {
-  //     //   return <pre {...properties} />;
-  //     return <CodeBlock {...properties} />;
-  //   },
 };
+
+// MDX Wrapper component
 export const MDXWrapper: FC<PropsWithChildren> = ({ children }) => (
   <MDXProvider components={components}>{children}</MDXProvider>
 );
