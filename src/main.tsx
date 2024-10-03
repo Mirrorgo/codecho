@@ -13,6 +13,7 @@ import React from "./mdx/React.mdx";
 import Hoc from "./mdx/HOC.mdx";
 import Hooks from "./mdx/Hooks.mdx";
 import Fetch from "./mdx/Fetch.mdx";
+import Debug from "./mdx/Debug.mdx";
 
 const router = createBrowserRouter([
   {
@@ -51,6 +52,10 @@ const router = createBrowserRouter([
       {
         path: "fetch",
         element: <Fetch />,
+      },
+      {
+        path: "debug",
+        element: <Debug />,
       },
     ],
   },

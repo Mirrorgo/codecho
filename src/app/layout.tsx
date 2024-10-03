@@ -10,6 +10,7 @@ const routes = [
   { path: "hoc", displayText: "高阶组件" },
   { path: "hooks", displayText: "hooks" },
   { path: "fetch", displayText: "fetch" },
+  { path: "debug", displayText: "调试" },
 ];
 
 function RootLayout() {
