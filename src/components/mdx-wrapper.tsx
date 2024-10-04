@@ -8,7 +8,7 @@ const CodeComponent: FC<any> = (props) => {
   if (props.className) {
     return <CodeBlock {...props} />;
   }
-  // Return inline code as is
+  // Return inline code
   return <code {...props} />;
 };
 
