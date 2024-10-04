@@ -34,33 +34,31 @@ const CodeBlock: FC<{ className?: string; children: string }> = ({
     setTimeout(() => setCopied(false), 2000);
   };
   const code = (
-    <>
-      <SyntaxHighlighter
-        language={language}
-        style={oneDark}
-        customStyle={{
-          margin: 0,
-          padding: "1rem",
-          fontSize: "0.875rem",
-          lineHeight: "1.5rem",
-        }}
-        wrapLines={true}
-        wrapLongLines={true}
-      >
-        {children}
-      </SyntaxHighlighter>
-      <CopyToClipboard text={children} onCopy={handleCopy}>
-        <button className="absolute top-2 right-2 bg-gray-700 hover:bg-gray-600 text-white px-2 py-1 rounded text-xs transition duration-200">
-          {copied ? "Copied!" : "Copy"}
-        </button>
-      </CopyToClipboard>
-    </>
+    <SyntaxHighlighter
+      language={language}
+      style={oneDark}
+      customStyle={{
+        margin: 0,
+        padding: "1rem",
+        fontSize: "0.875rem",
+        lineHeight: "1.5rem",
+      }}
+      wrapLines={true}
+      wrapLongLines={true}
+    >
+      {children}
+    </SyntaxHighlighter>
   );
 
   return (
     <div className="relative my-4 rounded-lg overflow-hidden">
       {/* TODO: 行数比较少的时候不折叠? */}
       {shouldCollapse ? <CodeBlockWrapper>{code}</CodeBlockWrapper> : code}
+      <CopyToClipboard text={children} onCopy={handleCopy}>
+        <button className="absolute top-2 right-2 bg-gray-700 hover:bg-gray-600 text-white px-2 py-1 rounded text-xs transition duration-200">
+          {copied ? "Copied!" : "Copy"}
+        </button>
+      </CopyToClipboard>
     </div>
   );
 };
