@@ -62,6 +62,17 @@ function TypographyList(props: PropsWithChildren) {
   return <ul className="mt-1 ml-6 list-disc [&>li]:mt-1">{props.children}</ul>;
 }
 
+function TypographyA(props: PropsWithChildren<{ href: string }>) {
+  return (
+    <a
+      href={props.href}
+      className={`text-blue-600 hover:underline `} // Customize styles here
+    >
+      {props.children}
+    </a>
+  );
+}
+
 // Components mapping for MDX
 const components: any = {
   h1: TypographyH1,
@@ -72,6 +83,7 @@ const components: any = {
   p: TypographyP,
   code: CodeComponent,
   ul: TypographyList,
+  a: TypographyA,
 };
 
 // MDX Wrapper component

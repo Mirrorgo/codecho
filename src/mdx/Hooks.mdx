@@ -1,4 +1,17 @@
 # 一些有用的hooks
+## useUpdate
+提供了一种简洁的方法来触发重新渲染
+> 来源: [ahooks](https://github.com/alibaba/hooks/blob/master/packages/hooks/src/useUpdate/index.ts)
+
+```jsx:no-collapse
+import { useCallback, useState } from 'react';
+const useUpdate = () => {
+  const [, setState] = useState({});
+  return useCallback(() => setState({}), []);
+};
+export default useUpdate;
+```
+{/* TODO:用法:也是一段code */}
 
 ## useMediaMinWidth
 
