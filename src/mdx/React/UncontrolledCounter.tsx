@@ -1,16 +1,16 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useRef, useState } from "react";
+import { FC, useRef, useState } from "react";
 
-const UncontrolledCounter: React.FC = () => {
+const UncontrolledCounter: FC = () => {
   const inputRef = useRef<HTMLInputElement>(null);
-  const [value, setValue] = useState<number>(0);
+  const [count, setCount] = useState<number>(0);
 
-  const increment = () => {
+  const handleIncrement = () => {
     if (inputRef.current) {
-      const newValue = parseInt(inputRef.current.value, 10);
-      if (!isNaN(newValue)) {
-        setValue((prevValue) => prevValue + newValue);
+      const increment = parseInt(inputRef.current.value, 10);
+      if (!isNaN(increment)) {
+        setCount((prevCount) => prevCount + increment);
         inputRef.current.value = ""; // Clear the input field
       }
     }
@@ -24,8 +24,8 @@ const UncontrolledCounter: React.FC = () => {
         placeholder="Enter number"
         className="w-30"
       />
-      <Button onClick={increment}>+1</Button>
-      <div>Current value: {value}</div>
+      <Button onClick={handleIncrement}>Add</Button>
+      <div>Count: {count}</div>
     </div>
   );
 };

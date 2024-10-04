@@ -1,64 +1,69 @@
-import { CodeBlockWrapper } from '@/components/mg/code-block-wrapper';
 import ControlledCounter from './React/ControlledCounter';
 import UncontrolledCounter from './React/UncontrolledCounter';
 
 # 受控组件和非受控组件
 
-## 1. 受控组件 (Controlled Component)
+## 受控组件 (Controlled Component)
 
 <ControlledCounter />
 
-{/* <CodeBlockWrapper> */}
 ```tsx
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { FC, useState } from "react";
+import { ChangeEvent, FC, useState } from "react";
 
 const ControlledCounter: FC = () => {
-  const [value, setValue] = useState<number>(0);
+  const [count, setCount] = useState<number>(0);
+  const [inputValue, setInputValue] = useState<string>("");
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newValue = parseInt(e.target.value, 10);
-    if (!isNaN(newValue)) setValue(newValue);
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setInputValue(e.target.value);
+  };
+
+  const handleIncrement = () => {
+    const increment = parseInt(inputValue, 10);
+    if (!isNaN(increment)) {
+      setCount((prevCount) => prevCount + increment);
+      setInputValue("");
+    }
   };
 
   return (
     <div className="flex gap-2 items-center">
       <Input
         type="number"
-        value={value}
+        value={inputValue}
         onChange={handleChange}
         placeholder="Enter number"
         className="w-30"
       />
-      <Button onClick={() => setValue((prev) => prev + 1)}>+1</Button>
-      <div>Current value: {value}</div>
+      <Button onClick={handleIncrement}>Add</Button>
+      <div>Count: {count}</div>
     </div>
   );
 };
 
 export default ControlledCounter;
 ```
-{/* </CodeBlockWrapper> */}
 
 
-## 2. 非受控组件 (Uncontrolled Component)
+## 非受控组件 (Uncontrolled Component)
 <UncontrolledCounter/>
 
 ```tsx
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useRef, useState } from "react";
+import { FC, useRef, useState } from "react";
 
-const UncontrolledCounter: React.FC = () => {
+const UncontrolledCounter: FC = () => {
   const inputRef = useRef<HTMLInputElement>(null);
-  const [value, setValue] = useState<number>(0);
+  const [count, setCount] = useState<number>(0);
 
-  const increment = () => {
+  const handleIncrement = () => {
     if (inputRef.current) {
-      const newValue = parseInt(inputRef.current.value, 10);
-      if (!isNaN(newValue)) {
-        setValue((prevValue) => prevValue + newValue);
+      const increment = parseInt(inputRef.current.value, 10);
+      if (!isNaN(increment)) {
+        setCount((prevCount) => prevCount + increment);
         inputRef.current.value = ""; // Clear the input field
       }
     }
@@ -72,16 +77,11 @@ const UncontrolledCounter: React.FC = () => {
         placeholder="Enter number"
         className="w-30"
       />
-      <Button onClick={increment}>+1</Button>
-      <div>Current value: {value}</div>
+      <Button onClick={handleIncrement}>Add</Button>
+      <div>Count: {count}</div>
     </div>
   );
 };
 
 export default UncontrolledCounter;
 ```
-
-## 说明
-
-- **受控组件**允许用户输入数字并通过按钮将其增加 1。每次用户输入都会更新状态。
-- **非受控组件**允许用户输入数字并通过按钮将该输入的数字直接增加到当前值。使用 `ref` 来访问输入框的值，并在每次点击按钮后清空输入框。
