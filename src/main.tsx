@@ -42,7 +42,7 @@ const routes = [
   {
     path: "/",
     element: <RootLayout />,
-    // errorElement: <NotFound />,
+    errorElement: <NotFound />,
     children: [
       {
         index: true, // 默认route
