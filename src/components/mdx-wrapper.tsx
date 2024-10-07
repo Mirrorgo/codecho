@@ -1,4 +1,4 @@
-import { FC, PropsWithChildren, useEffect, useRef } from "react";
+import { FC, PropsWithChildren } from "react";
 import { MDXProvider } from "@mdx-js/react";
 import CodeBlock from "./mg/code-block";
 
@@ -12,47 +12,35 @@ const CodeComponent: FC<any> = (props) => {
   return <code {...props} />;
 };
 
-// Common component to wrap headings with an anchor
-const HeadingWithAnchor: FC<PropsWithChildren<{ id: string }>> = ({
-  id,
-  children,
-}) => {
-  return (
-    <a href={`#${id}`} id={id}>
-      {children}
-    </a>
-  );
-};
-
 // Heading components with vertical spacing
-function TypographyH1(props: PropsWithChildren<{ id: string }>) {
+function TypographyH1(props: PropsWithChildren) {
   return (
     <h1 className="scroll-m-20 text-3xl font-extrabold tracking-tight lg:text-4xl my-6">
-      <HeadingWithAnchor id={props.id}>{props.children}</HeadingWithAnchor>
+      {props.children}
     </h1>
   );
 }
 
-function TypographyH2(props: PropsWithChildren<{ id: string }>) {
+function TypographyH2(props: PropsWithChildren) {
   return (
     <h2 className="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight my-4 first:mt-0">
-      <HeadingWithAnchor id={props.id}>{props.children}</HeadingWithAnchor>
+      {props.children}
     </h2>
   );
 }
 
-function TypographyH3(props: PropsWithChildren<{ id: string }>) {
+function TypographyH3(props: PropsWithChildren) {
   return (
     <h3 className="scroll-m-20 text-xl font-semibold tracking-tight my-3">
-      <HeadingWithAnchor id={props.id}>{props.children}</HeadingWithAnchor>
+      {props.children}
     </h3>
   );
 }
 
-function TypographyH4(props: PropsWithChildren<{ id: string }>) {
+function TypographyH4(props: PropsWithChildren) {
   return (
     <h4 className="scroll-m-20 text-lg font-semibold tracking-tight my-2">
-      <HeadingWithAnchor id={props.id}>{props.children}</HeadingWithAnchor>
+      {props.children}
     </h4>
   );
 }
@@ -87,33 +75,20 @@ function TypographyA(props: PropsWithChildren<{ href: string }>) {
 
 // MDX Wrapper component
 export const MDXWrapper: FC<PropsWithChildren> = ({ children }) => {
-  // A counter to keep track of the heading order
-  const headingCount = useRef(0);
-
-  useEffect(() => {
-    headingCount.current = 0; // Reset the count when the component mounts
-  }, []);
-
+  // heading的方式不知道怎么弄这个计数器比较好？或许可以弄一个中间件在构建的时候读取所有md内容，然后额外补上id
+  // item+index的方式来源于掘金和思否。 因为用一些特殊工具生成id的不可读。而用标题直接生成可能标题内容相同，所以用index
   // Function to generate an id based on the heading count
-  const generateHeadingId = () => {
-    headingCount.current += 1;
-    return `item-${headingCount.current}`;
-  };
+  // const generateHeadingId = () => {
+  //   headingCount.current += 1;
+  //   return `item-${headingCount.current}`;
+  // };
 
   // Components mapping for MDX
   const components: any = {
-    h1: (props: PropsWithChildren) => (
-      <TypographyH1 {...props} id={generateHeadingId()} />
-    ),
-    h2: (props: PropsWithChildren) => (
-      <TypographyH2 {...props} id={generateHeadingId()} />
-    ),
-    h3: (props: PropsWithChildren) => (
-      <TypographyH3 {...props} id={generateHeadingId()} />
-    ),
-    h4: (props: PropsWithChildren) => (
-      <TypographyH4 {...props} id={generateHeadingId()} />
-    ),
+    h1: TypographyH1,
+    h2: TypographyH2,
+    h3: TypographyH3,
+    h4: TypographyH4,
     blockquote: TypographyBlockquote,
     p: TypographyP,
     code: CodeComponent,
