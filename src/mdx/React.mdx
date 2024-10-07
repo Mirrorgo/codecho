@@ -3,7 +3,16 @@ import UncontrolledCounter from './React/UncontrolledCounter';
 
 # 受控组件和非受控组件
 
-## 受控组件 (Controlled Component)
+## 定义方式1: 是否由 React 组件管理数据
+
+- 受控组件：由 React 组件管理数据
+- 非受控组件：由 DOM 元素自身管理数据
+> In a controlled component, form data is handled by a React component.   
+> The alternative is uncontrolled components, where form data is handled by the DOM itself.  
+> 参考：[React 旧版文档](https://legacy.reactjs.org/docs/uncontrolled-components.html)  
+> **这种方式不严谨, 更好的方式应该参考[定义方式2]()**
+
+### 受控组件 (Controlled Component)
 
 <ControlledCounter />
 
@@ -47,7 +56,8 @@ export default ControlledCounter;
 ```
 
 
-## 非受控组件 (Uncontrolled Component)
+### 非受控组件 (Uncontrolled Component)
+
 <UncontrolledCounter/>
 
 ```tsx
@@ -85,3 +95,68 @@ const UncontrolledCounter: FC = () => {
 
 export default UncontrolledCounter;
 ```
+
+
+## 定义方式2: 组件状态是否由外部传入props完全控制
+
+通常情况下, 组件可能支持两种模式, 受控模式和非受控模式
+- 受控模式会支持类似外部传入`value`和`onChange`的props来实现
+- 非受控模式会支持类似`defaultValue`的props来实现, 有可能还会暴露ref
+
+### 受控组件 (Controlled Component)
+> 支持受控模式
+
+```tsx
+```
+### 非受控组件 (Uncontrolled Component)
+> 支持非受控模式
+
+```tsx
+
+
+```
+
+### 同时支持受控模式和非受控模式的组件
+> 通过usepropsvalue来实现
+
+
+
+```tsx
+import { SetStateAction, useRef } from 'react'
+import { useMemoizedFn, useUpdate } from 'ahooks'
+
+type Options<T> = {
+  value?: T
+  defaultValue: T
+  onChange?: (v: T) => void
+}
+
+export function usePropsValue<T>(options: Options<T>) {
+  const { value, defaultValue, onChange } = options
+
+  const update = useUpdate()
+
+  const stateRef = useRef<T>(value !== undefined ? value : defaultValue)
+  if (value !== undefined) {
+    stateRef.current = value
+  }
+
+  const setState = useMemoizedFn(
+    (v: SetStateAction<T>, forceTrigger: boolean = false) => {
+      // `forceTrigger` means trigger `onChange` even if `v` is the same as `stateRef.current`
+      const nextValue =
+        typeof v === 'function'
+          ? (v as (prevState: T) => T)(stateRef.current)
+          : v
+      if (!forceTrigger && nextValue === stateRef.current) return
+      stateRef.current = nextValue
+      update()
+      onChange?.(nextValue)
+    }
+  )
+  return [stateRef.current, setState] as const
+}
+```
+
+> 来源: [ant-design-mobile](https://github.com/ant-design/ant-design-mobile/blob/fae45549bcadb2b3c7f1dea27462543230e3b795/src/utils/use-props-value.ts)
+

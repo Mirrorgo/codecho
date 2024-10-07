@@ -1,7 +1,11 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import {
+  createBrowserRouter,
+  RouteObject,
+  RouterProvider,
+} from "react-router-dom";
 import RootLayout from "./app/layout";
 import Demo from "./app/demo/page";
 import NotFound from "./app/not-found";
@@ -15,7 +19,26 @@ import Hooks from "./mdx/Hooks.mdx";
 import Fetch from "./mdx/Fetch.mdx";
 import Debug from "./mdx/Debug.mdx";
 
-const router = createBrowserRouter([
+// 递归函数，用于为每个 element 包裹 MDXWrapper
+const wrapWithMDXWrapper = (routes: RouteObject[]) => {
+  return routes.map((route) => {
+    const newRoute = { ...route };
+
+    // 包裹每个 element
+    if (newRoute.element) {
+      newRoute.element = <MDXWrapper>{newRoute.element}</MDXWrapper>;
+    }
+
+    // 如果有子路由，递归包裹
+    if (newRoute.children) {
+      newRoute.children = wrapWithMDXWrapper(newRoute.children);
+    }
+
+    return newRoute;
+  });
+};
+
+const routes = [
   {
     path: "/",
     element: <RootLayout />,
@@ -59,12 +82,15 @@ const router = createBrowserRouter([
       },
     ],
   },
-]);
+];
+
+// 调用 wrapWithMDXWrapper 包裹所有的路由
+const wrappedRoutes = wrapWithMDXWrapper(routes);
+
+const router = createBrowserRouter(wrappedRoutes);
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <MDXWrapper>
-      <RouterProvider router={router} />
-    </MDXWrapper>
+    <RouterProvider router={router} />
   </StrictMode>
 );
