@@ -1,0 +1,218 @@
+# js
+
+> 记忆, 一些手写的 js 代码, 增强基础 js 能力
+
+## 基础概念 & 小技巧
+
+{/* TODO: 增加copy by line的功能 */}
+
+### 快速初始化数组
+
+```js
+// no-collapse
+Array(2); // [ <2 empty items> ]
+Array(2).fill(); // [ undefined, undefined ]
+Array(2).fill(0); // [ 0, 0 ]
+Array(2).map(() => Array(3).fill(0)); // [undefined, undefined]
+Array(2)
+  .fill()
+  .map(() => Array(3).fill(0)); // [ [ 0, 0, 0 ], [ 0, 0, 0 ] ]
+Array(2)
+  .fill(0)
+  .map(() => Array(3).fill(0)); // [ [ 0, 0, 0 ], [ 0, 0, 0 ] ]
+Array.from(Array(3), () => []); // [ [], [], [] ]
+Array.from({ length: 3 }, () => []); // [ [], [], [] ]
+```
+
+### 闭包
+
+通过闭包模拟类
+
+```js
+function createPerson(name) {
+  // 私有变量
+  let age = 0;
+  // 构造函数
+  return {
+    // 实例方法
+    greet() {
+      console.log(`Hello, my name is ${name} and I am ${age} years old.`);
+    },
+    // 设置年龄的方法
+    setAge(newAge) {
+      age = newAge; // 修改私有变量
+    },
+    // 获取年龄的方法
+    getAge() {
+      return age; // 返回私有变量
+    },
+  };
+}
+
+const alice = createPerson("Alice");
+alice.greet(); // 输出: Hello, my name is Alice and I am 0 years old.
+alice.setAge(30);
+console.log(alice.getAge()); // 输出: 30
+alice.greet(); // 输出: Hello, my name is Alice and I am 30 years old.
+```
+
+### 数组和字符串
+
+### 进制转换
+
+```js
+// no-collapse
+// 数字转换为 36 进制字符串
+const num = 123456;
+console.log(num.toString(36)); // 输出："2n9c"
+const base36String = "2n9c";
+console.log(parseInt(base36String, 36)); // 输出：123456
+```
+
+### 去重
+
+```js
+// no-collapse
+const array = [5, 4, 7, 8, 9, 2, 7, 5];
+array.filter((cur, idx, arr) => arr.indexOf(cur) === idx);
+[...new Set(array)];
+```
+
+### 浮点数精度问题
+
+0.1 + 0.2 不等于 0.3
+
+```js
+// no-collapse
+const isEqual = (a, b) => Math.abs(a - b) < Number.EPSILON;
+isEqual(0.1 + 0.2, 0.3);
+```
+
+```js
+// no-collapse
+const a = (0.1 + 0.2).toFixed(1); // 保留1位小数, 四舍五入
+console.log(a); // "0.3"
+```
+
+## 手写系列
+
+### flat
+
+```js
+// no-collapse
+function flat(arr, depth = 1) {
+  return arr.reduce((acc, cur) => {
+    if (Array.isArray(cur) && depth > 0) {
+      acc.push(...flat(cur, depth - 1));
+    } else {
+      acc.push(cur);
+    }
+    return acc;
+  }, []);
+}
+```
+
+### 浅拷贝&深拷贝
+
+shallow copy
+
+```js
+// no-collapse
+// 使用 Object.assign
+let obj = { a: 1, b: { c: 2 } };
+let shallowCopy = Object.assign({}, obj);
+
+// 使用扩展运算符
+let original = { a: 1, b: { c: 2 } };
+let copy = { ...original };
+
+// 对于数组
+let originalArray = [1, 2, { a: 3 }];
+let copyArray = [...originalArray];
+```
+
+deep copy
+
+```js
+// no-collapse
+// 使用 JSON 方法（有局限性）
+const original = { a: 1, b: { c: 2 } };
+const deep = JSON.parse(JSON.stringify(original));
+console.log(deep);
+```
+
+{/* NOTE: https://chatgpt.com/share/670fa387-d1e4-8012-8230-a15c2800e629 */}
+
+```js
+// no-collapse
+// 递归实现（简单版，不处理循环引用等复杂情况）
+function deepCopy(obj) {
+  if (typeof obj !== "object" || obj === null) {
+    return obj;
+  }
+  let newObj = Array.isArray(obj) ? [] : {};
+  for (let key in obj) {
+    if (Object.prototype.hasOwnProperty.call(obj, key)) {
+      newObj[key] = deepCopy(obj[key]);
+    }
+  }
+  return newObj;
+}
+
+const original = { a: 1, b: { c: 2 } };
+const deep = deepCopy(original);
+console.log(deep);
+```
+
+### 日期格式化
+
+实现 `format(new Date(), 'YYYY-MM-DD')` 函数
+
+```js
+// no-collapse
+function format(date, formatString) {
+  const year = date.getFullYear(); // 获取年份
+  const month = String(date.getMonth() + 1).padStart(2, "0"); // 获取月份并补零
+  const day = String(date.getDate()).padStart(2, "0"); // 获取日期并补零
+
+  // 替换格式字符串中的占位符
+  return formatString
+    .replace("YYYY", year)
+    .replace("MM", month)
+    .replace("DD", day);
+}
+
+// 使用示例
+const formattedDate = format(new Date(), "YYYY-MM-DD");
+console.log(formattedDate); // 输出: 2024-10-16
+```
+
+## 疑问
+
+为什么不能直接用 `obj.hasOwnProperty(key)` 而是要用 `Object.prototype.hasOwnProperty.call(obj, key)`
+
+```js
+// 情况1：对象覆盖了 hasOwnProperty 方法
+let obj1 = {
+  hasOwnProperty: function () {
+    return false;
+  },
+  prop: "exists",
+};
+
+console.log(obj1.hasOwnProperty("prop")); // 总是返回 false
+console.log(Object.prototype.hasOwnProperty.call(obj1, "prop")); // 正确返回 true
+
+// 情况2：无原型对象
+let obj2 = Object.create(null);
+obj2.prop = "exists";
+
+// console.log(obj2.hasOwnProperty('prop')); // 这行会抛出错误
+console.log(Object.prototype.hasOwnProperty.call(obj2, "prop")); // 正确返回 true
+
+// 情况3：正常对象
+let obj3 = { prop: "exists" };
+
+console.log(obj3.hasOwnProperty("prop")); // 返回 true
+console.log(Object.prototype.hasOwnProperty.call(obj3, "prop")); // 也返回 true
+```

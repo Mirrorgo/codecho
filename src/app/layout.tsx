@@ -12,6 +12,7 @@ const routes = [
   { path: "fetch", displayText: "fetch" },
   { path: "debug", displayText: "调试" },
   { path: "async", displayText: "异步" },
+  { path: "js", displayText: "js" },
 ];
 
 function RootLayout() {

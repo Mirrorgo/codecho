@@ -1,24 +1,103 @@
 # 简单异步函数
 
-用promise实现一个sleep函数
+用 promise 实现一个 sleep 函数
+
 ```js
 // no-collapse
 function sleep(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
+  return new Promise((resolve) => setTimeout(resolve, ms));
 }
 ```
 
 用法
+
 ```js
 // no-collapse
 async function delayedGreeting() {
-    console.log("Hello,");
-    await sleep(1000); // 等待 1 秒
-    console.log("world!");
-    await sleep(1000); // 再次等待 1 秒
-    console.log("This is an asynchronous message.");
+  console.log("Hello,");
+  await sleep(1000); // 等待 1 秒
+  console.log("world!");
+  await sleep(1000); // 再次等待 1 秒
+  console.log("This is an asynchronous message.");
 }
 
 delayedGreeting();
 ```
 
+# 异步递归
+
+用异步解决递归时可能的 stack overflow 问题
+{/* TODO: 支持分块的块级copy和整体copy */}
+
+```js
+// no-collapse
+// 同步递归版本
+function popLastItemSync(arr) {
+  if (arr.length === 0) {
+    return undefined;
+  } else if (arr.length === 1) {
+    return arr.pop();
+  } else {
+    arr.pop();
+    return popLastItemSync(arr);
+  }
+}
+```
+
+```js
+// no-collapse
+// 异步递归版本
+function popLastItemAsync(arr) {
+  return new Promise((resolve) => {
+    if (arr.length <= 1) {
+      resolve(arr.pop());
+    } else {
+      Promise.resolve().then(() => {
+        const lastItem = arr.pop();
+        popLastItemAsync(arr).then(() => {
+          resolve(lastItem);
+        });
+      });
+    }
+  });
+}
+```
+
+## 测试函数
+
+```js
+function testRecursion(syncFunc, asyncFunc, size) {
+  const syncArray = Array.from({ length: size }, (_, i) => i + 1);
+  const asyncArray = Array.from({ length: size }, (_, i) => i + 1);
+
+  console.log(`Testing with array size: ${size}`);
+
+  console.time("Sync Recursion");
+  try {
+    syncFunc(syncArray);
+    console.timeEnd("Sync Recursion");
+  } catch (error) {
+    console.timeEnd("Sync Recursion");
+    console.error("Sync Error:", error.message);
+  }
+
+  console.time("Async Recursion");
+  asyncFunc(asyncArray)
+    .then(() => {
+      console.timeEnd("Async Recursion");
+    })
+    .catch((error) => {
+      console.timeEnd("Async Recursion");
+      console.error("Async Error:", error.message);
+    });
+}
+```
+
+运行测试
+
+```js
+// no-collapse
+// testRecursion(popLastItemSync, popLastItemAsync, 10000);
+// 尝试一个更大的数组大小
+testRecursion(popLastItemSync, popLastItemAsync, 50000);
+```

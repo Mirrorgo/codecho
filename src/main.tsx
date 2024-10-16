@@ -19,6 +19,7 @@ import Hooks from "./mdx/Hooks.mdx";
 import Fetch from "./mdx/Fetch.mdx";
 import Debug from "./mdx/Debug.mdx";
 import Async from "./mdx/Asynchronous.mdx";
+import Js from "./mdx/Js.mdx";
 
 // 递归函数，用于为每个 element 包裹 MDXWrapper
 const wrapWithMDXWrapper = (routes: RouteObject[]) => {
@@ -84,6 +85,10 @@ const routes = [
       {
         path: "async",
         element: <Async />,
+      },
+      {
+        path: "js",
+        element: <Js />,
       },
     ],
   },
