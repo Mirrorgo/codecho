@@ -1,0 +1,24 @@
+# 简单异步函数
+
+用promise实现一个sleep函数
+```js
+// no-collapse
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+```
+
+用法
+```js
+// no-collapse
+async function delayedGreeting() {
+    console.log("Hello,");
+    await sleep(1000); // 等待 1 秒
+    console.log("world!");
+    await sleep(1000); // 再次等待 1 秒
+    console.log("This is an asynchronous message.");
+}
+
+delayedGreeting();
+```
+

@@ -20,20 +20,28 @@ const CodeBlock: FC<{ className?: string; children: string }> = ({
   children,
   className,
 }) => {
-  // const language = className ? className.replace(/language-/, "") : "";
-  const [lang, collapse] = (className || "")
-    .replace(/language-/, "")
-    .split(":");
-  const language = lang || "";
-  const shouldCollapse = collapse !== "no-collapse";
+  // const [lang, collapse] = (className || "")
+  //   .replace(/language-/, "")
+  //   .split(":");
+  // const language = lang || "";
+  // const shouldCollapse = collapse !== "no-collapse";
 
   const [copied, setCopied] = useState(false);
+  const language = className ? className.replace(/language-/, "") : "";
+
+  // 解析代码，检查是否有 no-collapse 注释
+  const lines = children.split("\n");
+  const firstLine = lines[0].trim();
+  const noCollapse = firstLine.startsWith("// no-collapse");
+
+  // 如果第一行是 no-collapse 注释，则从代码中移除
+  const code = noCollapse ? lines.slice(1).join("\n") : children;
 
   const handleCopy = () => {
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
-  const code = (
+  const highlightedCode = (
     <SyntaxHighlighter
       language={language}
       style={oneDark}
@@ -46,14 +54,18 @@ const CodeBlock: FC<{ className?: string; children: string }> = ({
       wrapLines={true}
       wrapLongLines={true}
     >
-      {children}
+      {code}
     </SyntaxHighlighter>
   );
 
   return (
     <div className="relative my-4 rounded-lg overflow-hidden">
       {/* TODO: 行数比较少的时候不折叠? */}
-      {shouldCollapse ? <CodeBlockWrapper>{code}</CodeBlockWrapper> : code}
+      {!noCollapse ? (
+        <CodeBlockWrapper>{highlightedCode}</CodeBlockWrapper>
+      ) : (
+        highlightedCode
+      )}
       <CopyToClipboard text={children} onCopy={handleCopy}>
         <button className="absolute top-2 right-2 bg-gray-700 hover:bg-gray-600 text-white px-2 py-1 rounded text-xs transition duration-200">
           {copied ? "Copied!" : "Copy"}

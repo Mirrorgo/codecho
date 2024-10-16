@@ -1,23 +1,31 @@
-# 一些有用的hooks
+import { UpdateNotifier1, UpdateNotifier2 } from "./Hooks/Hook.tsx";
+
+# 一些有用的 hooks
+
 ## useUpdate
+
 提供了一种简洁的方法来触发重新渲染
+
 > 来源: [ahooks](https://github.com/alibaba/hooks/blob/master/packages/hooks/src/useUpdate/index.ts)
 
-```jsx:no-collapse
-import { useCallback, useState } from 'react';
+```jsx
+// no-collapse
+import { useCallback, useState } from "react";
 const useUpdate = () => {
   const [, setState] = useState({});
   return useCallback(() => setState({}), []);
 };
 export default useUpdate;
 ```
+
 {/* TODO:用法:也是一段code */}
 
 ## useMediaMinWidth
 
 用于检测当前浏览器窗口的宽度是否符合指定的断点 (breakpoints)，并动态更新断点的匹配状态
 
-主要是为了弥补tailwind处理响应式的不足, 因为:
+主要是为了弥补 tailwind 处理响应式的不足, 因为:
+
 - Tailwind 只能用于样式，而不能处理逻辑
 - 想要动态控制复杂交互
 
@@ -54,3 +62,125 @@ const useMediaMinWidth = () => {
 
 export default useMediaMinWidth;
 ```
+
+# 记忆, 用来加深对自定义 hooks 的理解
+
+{/* ## useMyOptimistic */}
+
+## useStateWithUpdateNotifier
+
+### 版本 1: 初始化时传入额外回调, updateState 的时候自动触发回调
+
+```ts
+// no-collapse
+const useStateWithUpdateNotifier1 = <T>(
+  initialState: T,
+  updateFn: ((newState: T) => void) | null
+): [T, Dispatch<SetStateAction<T>>] => {
+  const callback = useRef(updateFn);
+  const [state, setState] = useState<T>(initialState);
+  useEffect(() => {
+    if (callback.current) {
+      callback.current(state);
+    }
+  }, [state]);
+  return [state, setState];
+};
+```
+
+用法 (记得打开开发者工具查看控制台输出哦)
+
+```tsx
+const [state, setState] = useStateWithUpdateNotifier1<number>(0, console.log);
+const handleOnClick321 = () => {
+  setState(3);
+  setState(2);
+  setState(1);
+};
+const handleOnClick45Plus = () => {
+  setState(4);
+  setState(5);
+  setState((cur) => cur + 1);
+};
+const handleOnClick789 = () => {
+  setState(7);
+  setState(8);
+  setState(9);
+};
+return (
+  <>
+    <div className="flex justify-between w-96">
+      <Button onClick={handleOnClick321}>setState:3,2,1</Button>
+      <Button onClick={handleOnClick45Plus}>setState:4,5,+</Button>
+      <Button onClick={handleOnClick789}>setState:7,8,9</Button>
+    </div>
+    <div className="leading-9 w-30">Current state: {state}</div>
+  </>
+);
+```
+
+<UpdateNotifier1 />
+
+### 版本 2: setState 的时候传入额外回调, 当本次更新完成后触发回调
+
+```ts
+// no-collapse
+const useStateWithUpdateNotifier2 = <T>(
+  initialValue: T
+): [T, (newState: SetStateAction<T>, fn?: (state: T) => void) => void] => {
+  const [state, setState] = useState<T>(initialValue);
+  const callback = useRef<((state: T) => void) | null>(null);
+  const updateFn = (newState: SetStateAction<T>, fn?: (state: T) => void) => {
+    if (fn) {
+      callback.current = fn;
+    }
+    setState(newState);
+  };
+  useEffect(() => {
+    if (callback.current) {
+      callback.current(state);
+      callback.current = null;
+    }
+  }, [state]);
+  return [state, updateFn];
+};
+```
+
+用法 (记得打开开发者工具查看控制台输出哦)
+
+```tsx
+const [state, setState] = useStateWithUpdateNotifier2<number>(0);
+const handleOnClick321 = () => {
+  setState(3);
+  setState(2, console.log);
+  setState(1);
+};
+const handleOnClick45Plus = () => {
+  setState(4);
+  setState(5);
+  setState((cur) => cur + 1);
+};
+const handleOnClick789 = () => {
+  setState(7, console.log);
+  setState(8);
+  setState(9);
+};
+return (
+  <>
+    <div className="flex justify-between w-[28rem]">
+      <Button onClick={handleOnClick321}>setState:3,2.log,1</Button>
+      <Button onClick={handleOnClick45Plus}>setState:4,5,+</Button>
+      <Button onClick={handleOnClick789}>setState:7.log,8,9</Button>
+    </div>
+    <div className="leading-9 w-30">Current state: {state}</div>
+  </>
+);
+```
+
+<UpdateNotifier2/ >
+
+{/* ## useMyDebounce */}
+
+{/* ## useMyThrottle */}
+
+{/* ## useMyStateWithLocalStorage */}
