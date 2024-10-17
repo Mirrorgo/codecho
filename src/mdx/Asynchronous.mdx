@@ -24,6 +24,33 @@ async function delayedGreeting() {
 delayedGreeting();
 ```
 
+# 链式调用
+
+```js
+// no-collapse
+class Man {
+  constructor() {
+    this.queue = Promise.resolve();
+  }
+
+  sleep(ms) {
+    this.queue = this.queue.then(
+      () => new Promise((resolve) => setTimeout(resolve, ms))
+    );
+    return this;
+  }
+
+  sayHi() {
+    this.queue = this.queue.then(() => console.log("Hi!"));
+    return this;
+  }
+}
+
+// 使用示例
+let a = new Man();
+a.sleep(3000).sayHi().sleep(1000).sleep(2000).sayHi();
+```
+
 # 异步递归
 
 用异步解决递归时可能的 stack overflow 问题
