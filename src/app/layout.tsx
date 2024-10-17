@@ -13,6 +13,8 @@ const routes = [
   { path: "debug", displayText: "调试" },
   { path: "async", displayText: "异步" },
   { path: "js", displayText: "js" },
+  { path: "reimplement", displayText: "手写系列" },
+  { path: "algorithm", displayText: "算法" },
 ];
 
 function RootLayout() {
