@@ -79,7 +79,6 @@ const getUsername = async () => {
 };
 
 function PollingComponent() {
-  // 使用 usePolling Hook，传入 fetch 函数，轮询间隔和超时时间
   const { data, isRequesting, run, cancel } = useRequest(getUsername, {
     pollingInterval: 3000,
   });

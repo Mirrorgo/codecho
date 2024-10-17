@@ -156,6 +156,44 @@ function useRequest<TData, TParams extends any[] = []>(
 export default useRequest;
 ```
 
+用法
+
+```tsx
+const getUsername = async () => {
+  // 模拟 API 调用
+  console.log("fetch data");
+  return Promise.resolve("John Doe");
+};
+
+function PollingComponent() {
+  const { data, isRequesting, run, cancel } = useRequest(getUsername, {
+    pollingInterval: 3000,
+  });
+
+  return (
+    <div>
+      {data ? (
+        <div>
+          <p>获取到的数据: {JSON.stringify(data)}</p>
+        </div>
+      ) : isRequesting ? (
+        <p>等待数据中...</p>
+      ) : (
+        <p>点击开始轮询按钮</p>
+      )}
+      <div className="flex gap-6">
+        <Button onClick={() => run()} disabled={isRequesting}>
+          开始轮询
+        </Button>
+        <Button onClick={cancel} disabled={!isRequesting}>
+          停止轮询
+        </Button>
+      </div>
+    </div>
+  );
+}
+```
+
 Demo
 
 <PollingComponent />
