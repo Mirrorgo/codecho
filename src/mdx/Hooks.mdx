@@ -1,4 +1,8 @@
-import { UpdateNotifier1, UpdateNotifier2 } from "./Hooks/Hook.tsx";
+import {
+  PollingComponent,
+  UpdateNotifier1,
+  UpdateNotifier2,
+} from "./Hooks/Hook.tsx";
 
 # 一些有用的 hooks
 
@@ -62,6 +66,99 @@ const useMediaMinWidth = () => {
 
 export default useMediaMinWidth;
 ```
+
+## useRequest (支持轮询)
+
+- 最初设计的接口时,hooks 内部设计了什么时候停止的逻辑,比如获得成功的数据后就停止,但是这样不好
+- 因为实际使用的时候,可能需要根据返回的字段的值判断,然后在停止
+- 因此, 把 `run` 和 `cancel` 这两个方法暴露出来,让用户自己控制
+- 这也可以算一种控制反转吧,将控制权从 `hook` 转移到使用者手中
+
+> 改进的设计参考了 [ahooks](https://ahooks.pages.dev/zh-CN/hooks/use-request/polling)
+
+{/* TODO: interval和timeout方式时间间隔的稳定性,requestAnimationFrame */}
+
+```ts
+import { useCallback, useEffect, useRef, useState } from "react";
+
+interface Options {
+  pollingInterval?: number;
+}
+
+type Service<TData, TParams extends any[]> = (
+  ...args: TParams
+) => Promise<TData>;
+
+function useRequest<TData, TParams extends any[] = []>(
+  service: Service<TData, TParams>,
+  options: Options = {}
+) {
+  const { pollingInterval } = options;
+
+  const [data, setData] = useState<TData | undefined>(undefined);
+  const [isRequesting, setIsRequesting] = useState(false);
+
+  const pollingTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const serviceRef = useRef(service);
+  serviceRef.current = service;
+
+  const cancel = useCallback(() => {
+    if (pollingTimerRef.current) {
+      clearTimeout(pollingTimerRef.current);
+      pollingTimerRef.current = null;
+    }
+    setIsRequesting(false);
+  }, []);
+
+  const run = useCallback(
+    async (...params: TParams) => {
+      // 取消之前的请求或轮询
+      cancel();
+
+      setIsRequesting(true);
+
+      const fetchData = async () => {
+        try {
+          const result = await serviceRef.current(...params);
+          setData(result);
+
+          if (pollingInterval) {
+            pollingTimerRef.current = setTimeout(fetchData, pollingInterval);
+          } else {
+            setIsRequesting(false);
+          }
+        } catch (error) {
+          console.error("Request error:", error);
+          setIsRequesting(false);
+        }
+      };
+
+      fetchData();
+    },
+    [pollingInterval, cancel]
+  );
+
+  useEffect(() => {
+    // 组件卸载时取消请求或轮询
+    return () => {
+      cancel();
+    };
+  }, [cancel]);
+
+  return {
+    data,
+    isRequesting,
+    run,
+    cancel,
+  };
+}
+
+export default useRequest;
+```
+
+Demo
+
+<PollingComponent />
 
 # 记忆, 用来加深对自定义 hooks 的理解
 

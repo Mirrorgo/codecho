@@ -3,6 +3,7 @@ import {
   useStateWithUpdateNotifier1,
   useStateWithUpdateNotifier2,
 } from "./hooks/useMyStateWithUpdateNotifier";
+import useRequest from "./hooks/useRequest";
 function UpdateNotifier1() {
   const [state, setState] = useStateWithUpdateNotifier1<number>(0, console.log);
   const handleOnClick321 = () => {
@@ -61,4 +62,49 @@ function UpdateNotifier2() {
   );
 }
 
-export { UpdateNotifier1, UpdateNotifier2 };
+// 模拟 fetch 请求函数
+// const fetchFunction = async () => {
+//   const response = await fetch("https://jsonplaceholder.typicode.com/todos/1");
+//   if (response.ok) {
+//     const result = await response.json();
+//     return result;
+//   }
+//   throw new Error("请求失败");
+// };
+
+const getUsername = async () => {
+  // 模拟 API 调用
+  console.log("fetch data");
+  return Promise.resolve("John Doe");
+};
+
+function PollingComponent() {
+  // 使用 usePolling Hook，传入 fetch 函数，轮询间隔和超时时间
+  const { data, isRequesting, run, cancel } = useRequest(getUsername, {
+    pollingInterval: 3000,
+  });
+
+  return (
+    <div>
+      {data ? (
+        <div>
+          <p>获取到的数据: {JSON.stringify(data)}</p>
+        </div>
+      ) : isRequesting ? (
+        <p>等待数据中...</p>
+      ) : (
+        <p>点击开始轮询按钮</p>
+      )}
+      <div className="flex gap-6">
+        <Button onClick={() => run()} disabled={isRequesting}>
+          开始轮询
+        </Button>
+        <Button onClick={cancel} disabled={!isRequesting}>
+          停止轮询
+        </Button>
+      </div>
+    </div>
+  );
+}
+
+export { UpdateNotifier1, UpdateNotifier2, PollingComponent };

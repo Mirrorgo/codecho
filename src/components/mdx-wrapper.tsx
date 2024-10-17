@@ -47,7 +47,7 @@ function TypographyH4(props: PropsWithChildren) {
 
 function TypographyBlockquote(props: PropsWithChildren) {
   return (
-    <blockquote className="mt-6 border-l-2 pl-6 italic">
+    <blockquote className="mt-1 border-l-2 pl-6 italic">
       {props.children}
     </blockquote>
   );
