@@ -1,13 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { createRoot } from "react-dom/client";
 import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogFooter,
-} from "@/components/ui/dialog";
 
 interface ModalProps {
   title?: string;
@@ -15,24 +8,19 @@ interface ModalProps {
   children?: React.ReactNode;
 }
 
-const ModalComponent: React.FC<ModalProps & { visible: boolean }> = ({
-  visible,
+const ModalComponent: React.FC<ModalProps> = ({
   title = "Modal",
   onClose,
   children,
 }) => {
   return (
-    <Dialog open={visible} onOpenChange={(open) => !open && onClose?.()}>
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>{title}</DialogTitle>
-        </DialogHeader>
-        {children}
-        <DialogFooter>
-          <Button onClick={onClose}>Close</Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
+    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+      <div className="bg-white p-4 rounded shadow-lg max-w-md w-full">
+        <h2 className="text-xl font-bold">{title}</h2>
+        <div>{children}</div>
+        <Button onClick={onClose}>Close</Button>
+      </div>
+    </div>
   );
 };
 
@@ -66,7 +54,6 @@ const ModalContainer: React.FC = () => {
   return (
     <ModalComponent
       {...modalProps}
-      visible={!!modalProps}
       onClose={() => {
         hideModal();
         modalProps.onClose?.();
