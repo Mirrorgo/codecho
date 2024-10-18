@@ -87,7 +87,12 @@ const initializeModal = () => {
 export const Modal = {
   show: (props: ModalProps) => {
     initializeModal();
-    showModalFn?.(props);
+    if (showModalFn) {
+      showModalFn(props);
+    } else {
+      // 如果showModalFn还没有被设置,我们可以使用一个小的延迟
+      setTimeout(() => showModalFn?.(props), 0);
+    }
   },
   hide: () => {
     hideModalFn?.();
