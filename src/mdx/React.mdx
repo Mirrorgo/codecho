@@ -185,3 +185,33 @@ export function usePropsValue<T>(options: Options<T>) {
   return [stateRef.current, setState] as const;
 }
 ```
+
+# react api
+
+## `<Profiler>`
+
+用于测量 React 应用中渲染的开销, 可以用于分析组件的渲染性能
+
+```tsx
+import React, { Profiler } from "react";
+
+function MyApp() {
+  return (
+    <Profiler id="导航" onRender={onRenderCallback}>
+      <Navigation />
+    </Profiler>
+  );
+}
+
+function onRenderCallback(
+  id,
+  phase,
+  actualDuration,
+  baseDuration,
+  startTime,
+  commitTime,
+  interactions
+) {
+  console.log(`${id} 渲染时间: ${actualDuration}毫秒`);
+}
+```

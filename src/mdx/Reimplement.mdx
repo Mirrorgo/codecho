@@ -1,6 +1,88 @@
+import { DebounceComponent } from "./Reimplement/Reimplement";
+
 # 手写系列
 
 ## 手写 Javascript 函数
+
+### debounce
+
+```js
+// no-collapse
+function debounce(func, delay) {
+  let timeoutId;
+
+  return function (...args) {
+    // 清除之前的定时器
+    clearTimeout(timeoutId);
+
+    // 设置新的定时器
+    timeoutId = setTimeout(() => {
+      func.apply(this, args);
+    }, delay);
+  };
+}
+```
+
+用法: (打开控制台查看 console 输出)
+
+<DebounceComponent />
+
+```tsx
+// no-collapse
+const debouncedSearch = debounce((searchTerm) => {
+  console.log("Searching for:", searchTerm);
+}, 300);
+
+function DebounceComponent() {
+  const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
+    debouncedSearch(event.target.value);
+  };
+
+  return <Input type="text" onChange={handleInputChange} className="w-36" />;
+}
+```
+
+疑惑: 为什么需要 `apply(this, args)` 而不是直接 `func(args)`?
+{/* TODO: 深入理解this */}
+
+```js
+const user = {
+  name: "Alice",
+  greet: function () {
+    console.log(`Hello, I'm ${this.name}`);
+  },
+};
+
+// const debouncedGreet = debounce(user.greet, 1000); // 不行
+const debouncedGreet = debounce(() => user.greet(), 1000); // 可行
+
+// 如果不正确处理 this，这里可能输出 "Hello, I'm undefined"
+debouncedGreet();
+```
+
+### throttle
+
+```js
+// no-collapse
+function throttle(func, limit) {
+  let lastFunc;
+  let lastRan;
+  return function (...args) {
+    if (!lastRan) {
+      func.apply(this, args);
+      lastRan = Date.now();
+    } else {
+      clearTimeout(lastFunc);
+      lastFunc = setTimeout(() => {
+        if (Date.now() - lastRan >= limit) {
+          func.apply(this, args);
+          lastRan = Date.now();
+        }
+      }, limit - (Date.now() - lastRan));
+    }
+  };
+}
+```
 
 ### flat
 

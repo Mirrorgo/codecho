@@ -1,6 +1,6 @@
 # js
 
-> 记忆, 一些手写的 js 代码, 增强基础 js 能力
+> 记忆, 增强基础 js 能力
 
 ## 基础概念 & 小技巧
 
@@ -56,7 +56,41 @@ console.log(alice.getAge()); // 输出: 30
 alice.greet(); // 输出: Hello, my name is Alice and I am 30 years old.
 ```
 
-### 数组和字符串
+{/* ### 数组和字符串 */}
+
+### apply, call, bind
+
+> 你可以直接把 `const boundFn = fn.bind(thisArg, arg1, arg2)` 看作  
+> `const boundFn = (...restArgs) => fn.call(thisArg, arg1, arg2, ...restArgs)`
+
+```js
+// no-collapse
+function.apply(thisArg, [argsArray]) // 立即执行, argsArray 是数组
+function.call(thisArg, arg1, arg2, ...) // 立即执行, 逐个传参
+function.bind(thisArg, arg1, arg2, ...) // 返回一个新函数, 逐个传参
+```
+
+bind 只会生效一次，之后的绑定不会再改变 this 的指向
+
+bind 追加参数
+
+```js
+// no-collapse
+function greet(greeting, punctuation) {
+  console.log(`${greeting}, my name is ${this.name}${punctuation}`);
+}
+
+const person = { name: "Alice" };
+
+// 第一次 bind，预设了第一个参数 "Hello"
+const boundGreet = greet.bind(person, "Hello");
+
+// 调用时传入第二个参数 "!"
+boundGreet("!"); // 输出: "Hello, my name is Alice!"
+
+const boundGreet2 = greet.bind(person, "Hi", "!!!");
+boundGreet2(); // 输出: "Hi, my name is Alice!!!"
+```
 
 ### 进制转换
 

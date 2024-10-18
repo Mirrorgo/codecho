@@ -22,6 +22,7 @@ import Async from "./mdx/Asynchronous.mdx";
 import Js from "./mdx/Js.mdx";
 import Reimplement from "./mdx/Reimplement.mdx";
 import Algorithm from "./mdx/Algorithm.mdx";
+import Components from "./mdx/Components.mdx";
 
 // 递归函数，用于为每个 element 包裹 MDXWrapper
 const wrapWithMDXWrapper = (routes: RouteObject[]) => {
@@ -99,6 +100,10 @@ const routes = [
       {
         path: "algorithm",
         element: <Algorithm />,
+      },
+      {
+        path: "components",
+        element: <Components />,
       },
     ],
   },

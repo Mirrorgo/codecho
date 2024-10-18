@@ -15,6 +15,7 @@ const routes = [
   { path: "js", displayText: "js" },
   { path: "reimplement", displayText: "手写系列" },
   { path: "algorithm", displayText: "算法" },
+  // { path: "components", displayText: "组件" },
 ];
 
 function RootLayout() {
