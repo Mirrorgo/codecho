@@ -18,7 +18,7 @@ import InputShow from "./React/InputShow";
 
 <ControlledCounter />
 
-```tsx
+```tsx collapse
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ChangeEvent, FC, useState } from "react";
@@ -61,7 +61,7 @@ export default ControlledCounter;
 
 <UncontrolledCounter />
 
-```tsx
+```tsx collapse
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { FC, useRef, useState } from "react";
@@ -112,7 +112,7 @@ export default UncontrolledCounter;
 
 > 支持受控模式
 
-```tsx
+```tsx collapse
 import { Input } from "@/components/ui/input";
 import { ChangeEvent } from "react";
 
@@ -131,7 +131,7 @@ export default ControlledInput;
 
 > 支持非受控模式
 
-```tsx
+```tsx collapse
 import { Input } from "@/components/ui/input";
 
 type UncontrolledInputProps = {
@@ -149,7 +149,7 @@ export default UncontrolledInput;
 > 通过**usepropsvalue**来实现  
 > 来源: [ant-design-mobile](https://github.com/ant-design/ant-design-mobile/blob/fae45549bcadb2b3c7f1dea27462543230e3b795/src/utils/use-props-value.ts)
 
-```tsx
+```tsx collapse
 import { SetStateAction, useRef } from "react";
 import { useMemoizedFn, useUpdate } from "ahooks";
 
@@ -192,7 +192,7 @@ export function usePropsValue<T>(options: Options<T>) {
 
 用于测量 React 应用中渲染的开销, 可以用于分析组件的渲染性能
 
-```tsx
+```tsx collapse
 import React, { Profiler } from "react";
 
 function MyApp() {

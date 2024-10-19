@@ -2,6 +2,7 @@ import {
   AnchorHTMLAttributes,
   FC,
   HTMLAttributes,
+  isValidElement,
   PropsWithChildren,
 } from "react";
 import { MDXProvider } from "@mdx-js/react";
@@ -12,13 +13,31 @@ import { MergeComponents } from "node_modules/@mdx-js/react/lib";
 // Custom code component
 function CodeComponent(props: PropsWithChildren<HTMLAttributes<HTMLElement>>) {
   // Check if className is present to determine if it's a block or inline code
-  console.log(props, "props");
-  if (props.className) {
-    return <CodeBlock {...props} />;
-  }
+  // console.log(props, "props");
+  // if (props.className) {
+  //   return <CodeBlock {...props} />;
+  // }
   // Return inline code
   return <code {...props} />;
 }
+
+type PreProps = React.DetailedHTMLProps<
+  React.HTMLAttributes<HTMLPreElement>,
+  HTMLPreElement
+>;
+
+const PreComponent: FC<PropsWithChildren<PreProps>> = (props) => {
+  // console.log("pre props", props);
+  const { children, ...rest } = props;
+  if (isValidElement(children)) {
+    return (
+      <pre>
+        <CodeBlock {...children.props} {...rest} />
+      </pre>
+    );
+  }
+  return null;
+};
 
 // Heading components with vertical spacing
 function TypographyH1(props: PropsWithChildren) {
@@ -108,6 +127,7 @@ export const MDXWrapper: FC<PropsWithChildren> = ({ children }) => {
     code: CodeComponent,
     ul: TypographyList,
     a: TypographyA,
+    pre: PreComponent,
   };
 
   return <MDXProvider components={components}>{children}</MDXProvider>;

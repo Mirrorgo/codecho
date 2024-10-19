@@ -1,9 +1,11 @@
 # fetch API
-自己常用的封装fetch请求的代码, 处理get和post
-- get的数据都在params里面
-- post的数据都在body里面
 
-```ts
+自己常用的封装 fetch 请求的代码, 处理 get 和 post
+
+- get 的数据都在 params 里面
+- post 的数据都在 body 里面
+
+```ts collapse
 type ApiResponse<T> = {
   success: boolean;
   code: number;
@@ -54,46 +56,45 @@ export const postData = async <T>(
 };
 ```
 
-
 用法
-```tsx
+
+```tsx collapse
 type TodoItem = {
   id: number;
   task: string;
   completed: boolean;
-}
+};
 const [todos, setTodos] = useState<TodoItem[]>([]);
 const [loading, setLoading] = useState<boolean>(true);
 
 const fetchTodos = useCallback(async () => {
-	try {
-		setLoading(true);
-		const res = await getData<FundingApplication[]>(
-		"/api/todos/list",
-		{ id: id }
-		);
-		setTodos(res.data || []);
-	} catch (error) {
-		console.error("Error fetching todos:", error);
-	} finally {
-		setLoading(false);
-	}
+  try {
+    setLoading(true);
+    const res = await getData<FundingApplication[]>("/api/todos/list", {
+      id: id,
+    });
+    setTodos(res.data || []);
+  } catch (error) {
+    console.error("Error fetching todos:", error);
+  } finally {
+    setLoading(false);
+  }
 }, [id]);
 
 useEffect(() => {
-	fetchTodos();
+  fetchTodos();
 }, [fetchTodos]);
 
 const handleCreate = async (formData: TodoItem) => {
-	try {
-		const res = await postData(`/api/todos/add`, formData);
-		if (res.success) {
-		fetchTodos();
-		} else {
-		console.error("Create request failed:", res.msg);
-		}
-	} catch (error) {
-		console.error("Error making create request:", error);
-	}
+  try {
+    const res = await postData(`/api/todos/add`, formData);
+    if (res.success) {
+      fetchTodos();
+    } else {
+      console.error("Create request failed:", res.msg);
+    }
+  } catch (error) {
+    console.error("Error making create request:", error);
+  }
 };
-  ```
+```

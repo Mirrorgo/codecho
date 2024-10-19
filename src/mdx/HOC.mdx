@@ -1,4 +1,4 @@
-import Hoc from './HOC/Hoc.tsx'
+import Hoc from "./HOC/Hoc.tsx";
 
 # 高阶组件 (HOC)
 
@@ -13,12 +13,11 @@ import Hoc from './HOC/Hoc.tsx'
 ### 组件结构
 
 - **withToggle HOC**：该高阶组件为符合 `WithToggleProps` 接口的任意组件添加了切换功能。它内部管理切换状态，并将该状态通过 props 传递给被包装的组件。
-  
 - **ToggleButton 组件**：该组件展示当前的切换状态（"ON" 或 "OFF"），并在点击时触发切换操作。
 
 ### 代码示例
 
-```tsx
+```tsx collapse
 import { Button } from "@/components/ui/button";
 import { useState, FC } from "react";
 

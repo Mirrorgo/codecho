@@ -16,26 +16,11 @@ SyntaxHighlighter.registerLanguage("javascript", javascript);
 SyntaxHighlighter.registerLanguage("typescript", typescript);
 
 // 定义 Props 类型
-const CodeBlock: FC<PropsWithChildren<HTMLAttributes<HTMLElement>>> = ({
-  children,
-  className,
-}) => {
-  // const [lang, collapse] = (className || "")
-  //   .replace(/language-/, "")
-  //   .split(":");
-  // const language = lang || "";
-  // const shouldCollapse = collapse !== "no-collapse";
-
+const CodeBlock: FC<
+  PropsWithChildren<HTMLAttributes<HTMLElement>> & { collapse: boolean }
+> = ({ children, className, collapse }) => {
   const [copied, setCopied] = useState(false);
   const language = className ? className.replace(/language-/, "") : "";
-
-  // 解析代码，检查是否有 no-collapse 注释
-  const lines = String(children).split("\n");
-  const firstLine = lines[0].trim();
-  const noCollapse = firstLine.startsWith("// no-collapse");
-
-  // 如果第一行是 no-collapse 注释，则从代码中移除
-  const code = noCollapse ? lines.slice(1).join("\n") : children;
 
   const handleCopy = () => {
     setCopied(true);
@@ -54,14 +39,14 @@ const CodeBlock: FC<PropsWithChildren<HTMLAttributes<HTMLElement>>> = ({
       wrapLines={true}
       wrapLongLines={true}
     >
-      {String(code)}
+      {String(children)}
     </SyntaxHighlighter>
   );
 
   return (
     <div className="relative my-4 rounded-lg overflow-hidden">
       {/* TODO: 行数比较少的时候不折叠? */}
-      {!noCollapse ? (
+      {collapse ? (
         <CodeBlockWrapper>{highlightedCode}</CodeBlockWrapper>
       ) : (
         highlightedCode

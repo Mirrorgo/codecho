@@ -7,7 +7,6 @@
 **前序遍历: 用于复制树和创建树**
 
 ```js
-// no-collapse
 function preOrder(node) {
   if (node) {
     console.log(node.value); // 访问节点
@@ -20,7 +19,6 @@ function preOrder(node) {
 **中序遍历: 对于二叉搜索树 (BST)，中序遍历会按照升序返回节点的值**
 
 ```js
-// no-collapse
 function inOrder(node) {
   if (node) {
     inOrder(node.left); // 遍历左子树
@@ -33,7 +31,6 @@ function inOrder(node) {
 **后序遍历: 适用于删除树，或者在处理树节点的子节点时使用**
 
 ```js
-// no-collapse
 function postOrder(node) {
   if (node) {
     postOrder(node.left); // 遍历左子树
@@ -48,7 +45,6 @@ function postOrder(node) {
 **层序遍历: 常用于广度优先搜索**
 
 ```js
-// no-collapse
 function levelOrder(root) {
   if (!root) return;
   const queue = [root];

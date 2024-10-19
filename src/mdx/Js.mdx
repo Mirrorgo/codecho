@@ -9,7 +9,6 @@
 ### 快速初始化数组
 
 ```js
-// no-collapse
 Array(2); // [ <2 empty items> ]
 Array(2).fill(); // [ undefined, undefined ]
 Array(2).fill(0); // [ 0, 0 ]
@@ -64,7 +63,6 @@ alice.greet(); // 输出: Hello, my name is Alice and I am 30 years old.
 > `const boundFn = (...restArgs) => fn.call(thisArg, arg1, arg2, ...restArgs)`
 
 ```js
-// no-collapse
 function.apply(thisArg, [argsArray]) // 立即执行, argsArray 是数组
 function.call(thisArg, arg1, arg2, ...) // 立即执行, 逐个传参
 function.bind(thisArg, arg1, arg2, ...) // 返回一个新函数, 逐个传参
@@ -75,7 +73,6 @@ bind 只会生效一次，之后的绑定不会再改变 this 的指向
 bind 追加参数
 
 ```js
-// no-collapse
 function greet(greeting, punctuation) {
   console.log(`${greeting}, my name is ${this.name}${punctuation}`);
 }
@@ -95,7 +92,6 @@ boundGreet2(); // 输出: "Hi, my name is Alice!!!"
 ### 进制转换
 
 ```js
-// no-collapse
 const num = 123456;
 console.log(num.toString(36)); // 输出："2n9c"
 const base36String = "2n9c";
@@ -105,7 +101,6 @@ console.log(parseInt(base36String, 36)); // 输出：123456
 ### 去重
 
 ```js
-// no-collapse
 const array = [5, 4, 7, 8, 9, 2, 7, 5];
 array.filter((cur, idx, arr) => arr.indexOf(cur) === idx);
 [...new Set(array)];
@@ -116,13 +111,11 @@ array.filter((cur, idx, arr) => arr.indexOf(cur) === idx);
 0.1 + 0.2 不等于 0.3
 
 ```js
-// no-collapse
 const isEqual = (a, b) => Math.abs(a - b) < Number.EPSILON;
 isEqual(0.1 + 0.2, 0.3);
 ```
 
 ```js
-// no-collapse
 const a = (0.1 + 0.2).toFixed(1); // 保留1位小数, 四舍五入
 console.log(a); // "0.3"
 ```
@@ -136,7 +129,6 @@ console.log(a); // "0.3"
 **示例: fibonacci**
 
 ```js
-// no-collapse
 function fib(n) {
   if (n < 2) return n;
   return fib(n - 1) + fib(n - 2);
@@ -144,7 +136,6 @@ function fib(n) {
 ```
 
 ```js
-// no-collapse
 function fib(n) {
   return fibImpl(n, 0, 1);
 }
@@ -158,7 +149,7 @@ function fibImpl(n, a, b) {
 
 为什么不能直接用 `obj.hasOwnProperty(key)` 而是要用 `Object.prototype.hasOwnProperty.call(obj, key)`
 
-```js
+```js collapse
 // 情况1：对象覆盖了 hasOwnProperty 方法
 let obj1 = {
   hasOwnProperty: function () {

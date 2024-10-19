@@ -7,7 +7,6 @@ import { DebounceComponent } from "./Reimplement/Reimplement";
 ### debounce
 
 ```js
-// no-collapse
 function debounce(func, delay) {
   let timeoutId;
 
@@ -28,7 +27,6 @@ function debounce(func, delay) {
 <DebounceComponent />
 
 ```tsx
-// no-collapse
 const debouncedSearch = debounce((searchTerm) => {
   console.log("Searching for:", searchTerm);
 }, 300);
@@ -63,7 +61,6 @@ debouncedGreet();
 ### throttle
 
 ```js
-// no-collapse
 function throttle(func, limit) {
   let lastFunc;
   let lastRan;
@@ -87,7 +84,6 @@ function throttle(func, limit) {
 ### flat
 
 ```js
-// no-collapse
 function flat(arr, depth = 1) {
   return arr.reduce((acc, cur) => {
     if (Array.isArray(cur) && depth > 0) {
@@ -105,7 +101,6 @@ function flat(arr, depth = 1) {
 shallow copy
 
 ```js
-// no-collapse
 // 使用 Object.assign
 let obj = { a: 1, b: { c: 2 } };
 let shallowCopy = Object.assign({}, obj);
@@ -122,7 +117,6 @@ let copyArray = [...originalArray];
 deep copy
 
 ```js
-// no-collapse
 // 使用 JSON 方法（有局限性）
 const original = { a: 1, b: { c: 2 } };
 const deep = JSON.parse(JSON.stringify(original));
@@ -132,7 +126,6 @@ console.log(deep);
 {/* NOTE: https://chatgpt.com/share/670fa387-d1e4-8012-8230-a15c2800e629 */}
 
 ```js
-// no-collapse
 // 递归实现（简单版，不处理循环引用等复杂情况）
 function deepCopy(obj) {
   if (typeof obj !== "object" || obj === null) {
@@ -157,7 +150,6 @@ console.log(deep);
 实现 `format(new Date(), 'YYYY-MM-DD')` 函数
 
 ```js
-// no-collapse
 function format(date, formatString) {
   const year = date.getFullYear(); // 获取年份
   const month = String(date.getMonth() + 1).padStart(2, "0"); // 获取月份并补零
