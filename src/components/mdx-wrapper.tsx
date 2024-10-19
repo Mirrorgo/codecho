@@ -1,16 +1,24 @@
-import { FC, PropsWithChildren } from "react";
+import {
+  AnchorHTMLAttributes,
+  FC,
+  HTMLAttributes,
+  PropsWithChildren,
+} from "react";
 import { MDXProvider } from "@mdx-js/react";
 import CodeBlock from "./mg/code-block";
+import { MDXComponents } from "mdx/types";
+import { MergeComponents } from "node_modules/@mdx-js/react/lib";
 
 // Custom code component
-const CodeComponent: FC<any> = (props) => {
+function CodeComponent(props: PropsWithChildren<HTMLAttributes<HTMLElement>>) {
   // Check if className is present to determine if it's a block or inline code
+  console.log(props, "props");
   if (props.className) {
     return <CodeBlock {...props} />;
   }
   // Return inline code
   return <code {...props} />;
-};
+}
 
 // Heading components with vertical spacing
 function TypographyH1(props: PropsWithChildren) {
@@ -62,7 +70,9 @@ function TypographyList(props: PropsWithChildren) {
   return <ul className="mt-1 ml-6 list-disc [&>li]:mt-1">{props.children}</ul>;
 }
 
-function TypographyA(props: PropsWithChildren<{ href: string }>) {
+function TypographyA(
+  props: PropsWithChildren<AnchorHTMLAttributes<HTMLAnchorElement>>
+) {
   return (
     <a
       href={props.href}
@@ -84,7 +94,11 @@ export const MDXWrapper: FC<PropsWithChildren> = ({ children }) => {
   // };
 
   // Components mapping for MDX
-  const components: any = {
+  const components:
+    | Readonly<MDXComponents>
+    | MergeComponents
+    | null
+    | undefined = {
     h1: TypographyH1,
     h2: TypographyH2,
     h3: TypographyH3,

@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import { FC, HTMLAttributes, PropsWithChildren, useState } from "react";
 import { PrismLight as SyntaxHighlighter } from "react-syntax-highlighter";
 import { oneDark } from "react-syntax-highlighter/dist/esm/styles/prism";
 import { CopyToClipboard } from "react-copy-to-clipboard";
@@ -16,7 +16,7 @@ SyntaxHighlighter.registerLanguage("javascript", javascript);
 SyntaxHighlighter.registerLanguage("typescript", typescript);
 
 // 定义 Props 类型
-const CodeBlock: FC<{ className?: string; children: string }> = ({
+const CodeBlock: FC<PropsWithChildren<HTMLAttributes<HTMLElement>>> = ({
   children,
   className,
 }) => {
@@ -30,7 +30,7 @@ const CodeBlock: FC<{ className?: string; children: string }> = ({
   const language = className ? className.replace(/language-/, "") : "";
 
   // 解析代码，检查是否有 no-collapse 注释
-  const lines = children.split("\n");
+  const lines = String(children).split("\n");
   const firstLine = lines[0].trim();
   const noCollapse = firstLine.startsWith("// no-collapse");
 
@@ -54,7 +54,7 @@ const CodeBlock: FC<{ className?: string; children: string }> = ({
       wrapLines={true}
       wrapLongLines={true}
     >
-      {code}
+      {String(code)}
     </SyntaxHighlighter>
   );
 
@@ -66,7 +66,8 @@ const CodeBlock: FC<{ className?: string; children: string }> = ({
       ) : (
         highlightedCode
       )}
-      <CopyToClipboard text={children} onCopy={handleCopy}>
+      {/* TODO: 复制的部分可能需要去掉一些内容*/}
+      <CopyToClipboard text={String(children)} onCopy={handleCopy}>
         <button className="absolute top-2 right-2 bg-gray-700 hover:bg-gray-600 text-white px-2 py-1 rounded text-xs transition duration-200">
           {copied ? "Copied!" : "Copy"}
         </button>
