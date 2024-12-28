@@ -1,5 +1,6 @@
 import {
   AnchorHTMLAttributes,
+  DetailedHTMLProps,
   FC,
   HTMLAttributes,
   isValidElement,
@@ -21,8 +22,8 @@ function CodeComponent(props: PropsWithChildren<HTMLAttributes<HTMLElement>>) {
   return <code {...props} />;
 }
 
-type PreProps = React.DetailedHTMLProps<
-  React.HTMLAttributes<HTMLPreElement>,
+type PreProps = DetailedHTMLProps<
+  HTMLAttributes<HTMLPreElement>,
   HTMLPreElement
 >;
 

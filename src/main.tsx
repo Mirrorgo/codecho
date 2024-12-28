@@ -6,6 +6,7 @@ import {
   RouteObject,
   RouterProvider,
 } from "react-router-dom";
+import { Analytics } from "@vercel/analytics/react";
 import RootLayout from "./app/layout";
 import Demo from "./app/demo/page";
 import NotFound from "./app/not-found";
@@ -117,5 +118,6 @@ const router = createBrowserRouter(wrappedRoutes);
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <RouterProvider router={router} />
+    <Analytics />
   </StrictMode>
 );
