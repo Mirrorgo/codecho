@@ -98,3 +98,125 @@ const handleCreate = async (formData: TodoItem) => {
   }
 };
 ```
+
+# PaginatedFetcher
+
+> fetching all pages of data from a paginated API
+
+```typescript collapse
+/**
+ * A utility class for fetching all pages of data from a paginated API with controlled concurrency
+ */
+class PaginatedFetcher {
+  private url: string;
+  private baseBody: any;
+  private batchSize: number;
+  private httpClient: any;
+
+  /**
+   * Create a new PaginatedFetcher
+   * @param options Configuration options
+   */
+  constructor(options: {
+    url: string;
+    baseBody: any;
+    batchSize?: number;
+    httpClient: any;
+  }) {
+    this.url = options.url;
+    this.baseBody = options.baseBody;
+    this.batchSize = options.batchSize || 20;
+    this.httpClient = options.httpClient;
+  }
+
+  /**
+   * Fetch a single page of data
+   * @param pageNumber The page number to fetch
+   * @returns The page data
+   */
+  private async fetchOnePage(pageNumber: number) {
+    console.log("Fetching page:", pageNumber);
+    const response = await this.httpClient.curl(this.url, {
+      method: "POST",
+      contentType: "json",
+      dataType: "json",
+      data: {
+        ...this.baseBody,
+        pageNumber,
+      },
+    });
+    console.log("Fetched page:", pageNumber);
+    return response.data.result;
+  }
+
+  /**
+   * Fetch a batch of pages concurrently
+   * @param startPage The starting page number
+   * @param endPage The ending page number
+   * @returns Array of page data
+   */
+  private async fetchPagesInBatches(startPage: number, endPage: number) {
+    const promises = [];
+    for (let pageNumber = startPage; pageNumber <= endPage; pageNumber++) {
+      promises.push(this.fetchOnePage(pageNumber));
+    }
+    return await Promise.all(promises);
+  }
+
+  /**
+   * Fetch all pages of data with controlled concurrency
+   * @param processor Optional function to process the collected records
+   * @returns Processed records or all records if no processor is provided
+   */
+  async fetchAllPages(processor?: (records: any[]) => Promise<any[]>) {
+    // Fetch first page to get total pages count
+    const firstPageData = await this.fetchOnePage(1);
+    const totalPages = firstPageData.pages;
+
+    // Initialize with first page data
+    const allData = [firstPageData];
+    const allRecords = [...firstPageData.records];
+
+    // Fetch remaining pages in batches
+    for (let i = 2; i <= totalPages; i += this.batchSize) {
+      const endPage = Math.min(i + this.batchSize - 1, totalPages);
+      const fetchedPages = await this.fetchPagesInBatches(i, endPage);
+
+      // Add to collected data
+      allData.push(...fetchedPages);
+      fetchedPages.forEach((data) => allRecords.push(...data.records));
+    }
+
+    // Process records if processor is provided
+    if (processor) {
+      const processedRecords = await processor(allRecords);
+      console.log("Data processed:", processedRecords.length);
+      return processedRecords;
+    }
+
+    console.log("Data fetched:", allRecords.length);
+    return allRecords;
+  }
+}
+
+/**
+ * Usage example:
+ */
+async function example() {
+  const fetcher = new PaginatedFetcher({
+    url: "https://api.example.com/data",
+    baseBody: { filters: { status: "active" } },
+    batchSize: 20,
+    httpClient: ctx,
+  });
+
+  // Simple usage
+  const allRecords = await fetcher.fetchAllPages();
+
+  // With custom processor
+  const processedRecords = await fetcher.fetchAllPages(async (records) => {
+    // Do something with all records
+    return await loadDatabase(records);
+  });
+}
+```
