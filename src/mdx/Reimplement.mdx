@@ -166,3 +166,212 @@ function format(date, formatString) {
 const formattedDate = format(new Date(), "YYYY-MM-DD");
 console.log(formattedDate); // 输出: 2024-10-16
 ```
+
+## Promise 相关
+
+### 手写 Promise.all
+
+原本效果
+
+```js
+const promise1 = Promise.resolve(3);
+const promise2 = 42;
+const promise3 = new Promise((resolve, reject) => {
+  setTimeout(resolve, 100, "foo");
+});
+
+Promise.all([promise1, promise2, promise3]).then((values) => {
+  console.log(values);
+});
+```
+
+手写实现
+
+```js collapse
+function promiseAll(promises) {
+  if (promises.length === 0) {
+    return Promise.resolve([]);
+  }
+
+  return new Promise((resolve, reject) => {
+    const results = new Array(promises.length);
+    let completedCount = 0;
+
+    promises.forEach((promise, index) => {
+      Promise.resolve(promise)
+        .then((value) => {
+          results[index] = value;
+          if (++completedCount === promises.length) {
+            resolve(results);
+          }
+        })
+        .catch(reject);
+    });
+  });
+}
+```
+
+用法
+
+```js collapse
+// 测试用例
+const promise1 = Promise.resolve(1);
+const promise2 = new Promise((resolve) => setTimeout(() => resolve(2), 100));
+const promise3 = new Promise((resolve) => setTimeout(() => resolve(3), 50));
+
+// 使用自定义的Promise.all
+promiseAll([promise1, promise2, promise3])
+  .then((values) => {
+    console.log("所有Promise已完成:", values); // [1, 2, 3]
+  })
+  .catch((error) => {
+    console.error("有Promise失败:", error);
+  });
+
+// 失败的情况
+const promise4 = Promise.reject("Promise失败了");
+promiseAll([promise1, promise4])
+  .then((values) => {
+    console.log("所有Promise已完成:", values);
+  })
+  .catch((error) => {
+    console.error("有Promise失败:", error); // 'Promise失败了'
+  });
+```
+
+### 手写 Promise.any
+
+原本效果
+
+```js
+const promise1 = Promise.reject(0);
+const promise2 = new Promise((resolve) => setTimeout(resolve, 100, "quick"));
+const promise3 = new Promise((resolve) => setTimeout(resolve, 500, "slow"));
+
+const promises = [promise1, promise2, promise3];
+
+Promise.any(promises).then((value) => console.log(value));
+// Expected output: "quick"
+```
+
+手写实现
+
+```js collapse
+function promiseAny(promises) {
+  return new Promise((resolve, reject) => {
+    if (promises.length === 0) {
+      reject(new AggregateError([], "All promises were rejected"));
+      return;
+    }
+
+    let rejectedCount = 0;
+    const errors = [];
+
+    promises.forEach((promise) => {
+      Promise.resolve(promise)
+        .then((value) => {
+          resolve(value);
+        })
+        .catch((error) => {
+          errors.push(error);
+          rejectedCount++;
+
+          if (rejectedCount === promises.length) {
+            reject(new AggregateError(errors, "All promises were rejected"));
+          }
+        });
+    });
+  });
+}
+```
+
+用法
+
+```js collapse
+// 简单示例
+const promise1 = Promise.reject("错误1");
+const promise2 = new Promise((resolve) =>
+  setTimeout(() => resolve("成功"), 100)
+);
+const promise3 = Promise.reject("错误2");
+
+promiseAny([promise1, promise2, promise3])
+  .then((value) => console.log(value)) // 输出: "成功"
+  .catch((error) => console.log(error));
+
+// 全部拒绝的例子
+promiseAny([Promise.reject("错误1"), Promise.reject("错误2")])
+  .then((value) => console.log(value))
+  .catch((error) => console.log("全部拒绝:", error.message, error.errors)); // 输出错误信息
+```
+
+### 手写 Promise.race
+
+原本效果
+
+```js
+const promise1 = new Promise((resolve, reject) => {
+  setTimeout(resolve, 500, "one");
+});
+
+const promise2 = new Promise((resolve, reject) => {
+  setTimeout(resolve, 100, "two");
+});
+
+Promise.race([promise1, promise2]).then((value) => {
+  console.log(value);
+  // Both resolve, but promise2 is faster
+});
+// Expected output: "two"
+```
+
+手写实现
+
+```js collapse
+function promiseRace(promises) {
+  return new Promise((resolve, reject) => {
+    if (promises.length === 0) {
+      return; // pend forever, same as native Promise.race
+    }
+
+    promises.forEach((promise) => {
+      Promise.resolve(promise)
+        .then((value) => {
+          resolve(value);
+        })
+        .catch((error) => {
+          reject(error);
+        });
+    });
+  });
+}
+```
+
+用法
+
+```js collapse
+// 示例：带有成功和失败的 Promises
+const promise1 = new Promise((resolve) =>
+  setTimeout(() => resolve("第一个完成"), 200)
+);
+const promise2 = new Promise((resolve) =>
+  setTimeout(() => resolve("第二个完成"), 100)
+);
+const promise3 = new Promise((resolve, reject) =>
+  setTimeout(() => reject("第三个失败"), 50)
+);
+
+// 测试成功的场景
+promiseRace([promise1, promise2])
+  .then((value) => console.log("成功:", value)) // 输出: "成功: 第二个完成"
+  .catch((error) => console.log("失败:", error));
+
+// 测试失败的场景
+promiseRace([promise1, promise3])
+  .then((value) => console.log("成功:", value))
+  .catch((error) => console.log("失败:", error)); // 输出: "失败: 第三个失败"
+
+// 测试空数组
+const emptyRace = promiseRace([]);
+console.log("空数组的 race 将永远处于 pending 状态:", emptyRace);
+```

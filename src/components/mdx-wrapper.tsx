@@ -83,7 +83,7 @@ function TypographyBlockquote(props: PropsWithChildren) {
 
 function TypographyP(props: PropsWithChildren) {
   return (
-    <p className="leading-7 [&:not(:first-child)]:mt-6">{props.children}</p>
+    <p className="leading-7 [&:not(:first-child)]:mt-2">{props.children}</p>
   );
 }
 function TypographyList(props: PropsWithChildren) {
