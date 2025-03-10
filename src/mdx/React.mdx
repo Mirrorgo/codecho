@@ -108,6 +108,8 @@ export default UncontrolledCounter;
 
 <InputShow />
 
+> 建议打开 react 开发者工具查看内部状态的变化
+
 ### 受控组件 (Controlled Component)
 
 > 支持受控模式
@@ -183,6 +185,61 @@ export function usePropsValue<T>(options: Options<T>) {
     }
   );
   return [stateRef.current, setState] as const;
+}
+```
+
+用法
+
+```tsx collapse
+import React from "react";
+import { usePropsValue } from "./usePropsValue";
+
+// 一个简单的输入框组件
+function CustomInput({ value, defaultValue = "", onChange }) {
+  // 使用 usePropsValue 处理受控和非受控状态
+  const [inputValue, setInputValue] = usePropsValue({
+    value,
+    defaultValue,
+    onChange,
+  });
+
+  // 处理输入变化
+  const handleChange = (e) => {
+    setInputValue(e.target.value);
+  };
+
+  return <input value={inputValue} onChange={handleChange} />;
+}
+
+// 使用示例：
+function App() {
+  // 非受控模式 - 只提供 defaultValue
+  return (
+    <div>
+      <h3>非受控模式</h3>
+      <CustomInput defaultValue="默认文本" />
+
+      <h3>受控模式</h3>
+      <ControlledExample />
+    </div>
+  );
+}
+
+// 受控模式示例
+function ControlledExample() {
+  const [value, setValue] = React.useState("受控文本");
+
+  const handleChange = (newValue) => {
+    console.log("值已更新:", newValue);
+    setValue(newValue);
+  };
+
+  return (
+    <>
+      <CustomInput value={value} onChange={handleChange} />
+      <button onClick={() => setValue("重置文本")}>重置</button>
+    </>
+  );
 }
 ```
 
