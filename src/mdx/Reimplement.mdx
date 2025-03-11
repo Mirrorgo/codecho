@@ -167,6 +167,22 @@ const formattedDate = format(new Date(), "YYYY-MM-DD");
 console.log(formattedDate); // 输出: 2024-10-16
 ```
 
+### 模板引擎
+
+```js
+/**
+ * 简单的字符串模板引擎
+ * 只支持基本变量替换功能
+ * 使用方式: "Hello, {name}".use({ name: "World" })
+ */
+String.prototype.use = function (data) {
+  if (!data) return this;
+  return this.replace(/{([^{}]+)}/g, function (match, key) {
+    return data[key] !== undefined ? data[key] : match;
+  });
+};
+```
+
 ## Promise 相关
 
 ### 手写 Promise.all
