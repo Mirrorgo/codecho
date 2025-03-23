@@ -1,0 +1,40 @@
+# html
+
+## title 属性
+
+**title**设置后可以产生类似**tooltip**的效果, 且此属性可继承, 设置子元素**title**为`""`可取消继承  
+比如：
+
+```html
+<div title="父元素的提示信息">
+  这是父元素 (鼠标悬停会显示"父元素的提示信息")
+  <div>这是子元素 (也会显示"父元素的提示信息")</div>
+  <div title="">这个子元素不会显示提示信息</div>
+  <div title="子元素自己的提示">这个子元素有自己的提示信息</div>
+</div>
+```
+
+<div
+  class="bg-blue-500 text-white p-5 rounded-lg w-4/5 max-w-lg shadow-md"
+  title="父元素的提示信息"
+>
+  <p>这是父元素 (鼠标悬停会显示"父元素的提示信息")</p>
+
+<div class="bg-blue-600 my-2.5 p-4 rounded-md transition-all duration-300 ease-in-out hover:translate-x-2 hover:bg-blue-800">
+  <div>这是子元素 (会继承父元素的提示信息)</div>
+</div>
+
+<div
+  class="bg-red-600 my-2.5 p-4 rounded-md transition-all duration-300 ease-in-out hover:translate-x-2 hover:bg-red-800"
+  title=""
+>
+  <div>这个子元素不会显示提示信息</div>
+</div>
+
+  <div
+    class="bg-green-600 my-2.5 p-4 rounded-md transition-all duration-300 ease-in-out hover:translate-x-2 hover:bg-green-800"
+    title="子元素自己的提示"
+  >
+    <div>这个子元素有自己的提示信息</div>
+  </div>
+</div>
