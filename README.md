@@ -1,16 +1,31 @@
- English | [中文](README.zh.md)
+English | [中文](README.zh.md)
 
 # Codecho
 
-> 💡 **Codecho** is an open-source code snippet library that provides developers with a wide range of reusable snippets. Simply copy and paste to integrate them into your project with ease!
+> 💡 **Codecho** is my personal collection of code snippets that I've open-sourced to share with other developers. These snippets can be easily integrated into your projects through simple copy and paste!
 
 ## 🖥️ Live Preview
 
-Check out [Codecho](https://codecho.vercel.app/) to see live demos of the snippets in action.
+Check out [Codecho](https://codecho.unimelb.top/) to browse all code snippets and see them in action.
+
+## 💻 How to Use
+
+Usage is straightforward:
+
+1. Browse to find the snippet you need
+2. Copy the code snippet
+3. Paste it into your project
+4. Make any necessary adjustments as needed
+
+No need for additional dependencies or complex integration processes—use freely according to your requirements!
+
+## 📝 About This Project
+
+This code snippet library is a collection from my personal work and learning experiences. I've open-sourced it purely to share and help other developers. Feel free to use these snippets to accelerate your development work.
 
 ## 📄 License
 
-This project is licensed under the [MIT License](LICENSE).
+This project is licensed under the [MIT License](LICENSE). You're free to use these code snippets in both personal and commercial projects.
 
 
 <!-- 

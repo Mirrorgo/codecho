@@ -1,13 +1,96 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/logo.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Codecho</title>
+    <title>Codecho - 个人代码片段库</title>
+
+    <!-- SEO Meta Tags -->
+    <meta
+      name="description"
+      content="一个个人收藏的可重复使用的代码片段集合，您可以轻松复制粘贴到您的项目中。"
+    />
+    <meta
+      name="keywords"
+      content="代码片段, 开发者工具, 编程, 网页开发, React, JavaScript, TypeScript, CSS"
+    />
+    <meta name="author" content="您的姓名" />
+
+    <!-- Open Graph / Social Media -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://codecho.unimelb.top" />
+    <meta property="og:title" content="Codecho - 个人代码片段库" />
+    <meta
+      property="og:description"
+      content="一个个人收藏的可重复使用的代码片段集合，您可以轻松复制粘贴到您的项目中。"
+    />
+    <meta
+      property="og:image"
+      content="https://codecho.unimelb.top/screenshot.png"
+    />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content="https://codecho.unimelb.top" />
+    <meta name="twitter:title" content="Codecho - 个人代码片段库" />
+    <meta
+      name="twitter:description"
+      content="一个个人收藏的可重复使用的代码片段集合，您可以轻松复制粘贴到您的项目中。"
+    />
+    <meta
+      name="twitter:image"
+      content="https://codecho.unimelb.top/screenshot.png"
+    />
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://codecho.unimelb.top" />
+
+    <!-- PWA Meta Tags -->
+    <meta name="theme-color" content="#ffffff" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="Codecho" />
+
+    <!-- Apple Icons -->
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
+    <!-- Manifest -->
+    <link rel="manifest" href="/manifest.webmanifest" />
+
+    <!-- Preconnect to important domains -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "Codecho",
+        "description": "一个个人收藏的可重复使用的代码片段集合，您可以轻松复制粘贴到您的项目中。",
+        "url": "https://codecho.unimelb.top",
+        "applicationCategory": "DeveloperApplication",
+        "operatingSystem": "Any",
+        "author": {
+          "@type": "Person",
+          "name": "Mirrorgo"
+        },
+        "license": "https://github.com/Mirrorgo/codecho/blob/master/LICENSE"
+      }
+    </script>
   </head>
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
+    <noscript>
+      <div style="text-align: center; padding: 2rem">
+        <h1>Codecho</h1>
+        <p>
+          此应用程序需要 JavaScript 才能正常运行。请在您的浏览器中启用
+          JavaScript。
+        </p>
+      </div>
+    </noscript>
   </body>
 </html>
