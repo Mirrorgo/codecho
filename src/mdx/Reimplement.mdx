@@ -216,16 +216,18 @@ function promiseAll(promises) {
     const results = new Array(promises.length);
     let completedCount = 0;
 
-    promises.forEach((promise, index) => {
-      Promise.resolve(promise)
+    for (let i = 0; i < promises.length; i++) {
+      Promise.resolve(promises[i])
         .then((value) => {
-          results[index] = value;
-          if (++completedCount === promises.length) {
+          results[i] = value;
+          completedCount++;
+
+          if (completedCount === promises.length) {
             resolve(results);
           }
         })
         .catch(reject);
-    });
+    }
   });
 }
 ```
@@ -284,22 +286,22 @@ function promiseAny(promises) {
     }
 
     let rejectedCount = 0;
-    const errors = [];
+    const errors = new Array(promises.length);
 
-    promises.forEach((promise) => {
-      Promise.resolve(promise)
+    for (let i = 0; i < promises.length; i++) {
+      Promise.resolve(promises[i])
         .then((value) => {
           resolve(value);
         })
         .catch((error) => {
-          errors.push(error);
+          errors[i] = error;
           rejectedCount++;
 
           if (rejectedCount === promises.length) {
             reject(new AggregateError(errors, "All promises were rejected"));
           }
         });
-    });
+    }
   });
 }
 ```
@@ -350,18 +352,12 @@ Promise.race([promise1, promise2]).then((value) => {
 function promiseRace(promises) {
   return new Promise((resolve, reject) => {
     if (promises.length === 0) {
-      return; // pend forever, same as native Promise.race
+      return;
     }
 
-    promises.forEach((promise) => {
-      Promise.resolve(promise)
-        .then((value) => {
-          resolve(value);
-        })
-        .catch((error) => {
-          reject(error);
-        });
-    });
+    for (let i = 0; i < promises.length; i++) {
+      Promise.resolve(promises[i]).then(resolve).catch(reject);
+    }
   });
 }
 ```
@@ -393,4 +389,68 @@ promiseRace([promise1, promise3])
 // 测试空数组
 const emptyRace = promiseRace([]);
 console.log("空数组的 race 将永远处于 pending 状态:", emptyRace);
+```
+
+### 手写 Promise.allSettled
+
+Promise.allSettled() 方法返回一个在所有给定的 promise 都已经 fulfilled 或 rejected 后的 promise，
+并带有一个对象数组，每个对象表示对应的 promise 结果。
+
+```js
+function promiseAllSettled(promises) {
+  return new Promise((resolve) => {
+    if (promises.length === 0) {
+      resolve([]);
+      return;
+    }
+
+    const results = new Array(promises.length);
+    let completedCount = 0;
+
+    for (let i = 0; i < promises.length; i++) {
+      Promise.resolve(promises[i])
+        .then((value) => {
+          results[i] = { status: "fulfilled", value };
+          completedCount++;
+
+          if (completedCount === promises.length) {
+            resolve(results);
+          }
+        })
+        .catch((reason) => {
+          results[i] = { status: "rejected", reason };
+          completedCount++;
+
+          if (completedCount === promises.length) {
+            resolve(results);
+          }
+        });
+    }
+  });
+}
+```
+
+用法示例
+
+```js
+const promise1 = Promise.resolve(1);
+const promise2 = new Promise((resolve) => setTimeout(() => resolve(2), 100));
+const promise3 = Promise.reject("错误");
+
+promiseAllSettled([promise1, promise2, promise3]).then((results) => {
+  console.log("所有 Promise 已完成或拒绝:");
+  results.forEach((result, index) => {
+    if (result.status === "fulfilled") {
+      console.log(`Promise ${index + 1} 成功:`, result.value);
+    } else {
+      console.log(`Promise ${index + 1} 失败:`, result.reason);
+    }
+  });
+});
+
+// 输出:
+// 所有 Promise 已完成或拒绝:
+// Promise 1 成功: 1
+// Promise 2 成功: 2
+// Promise 3 失败: 错误
 ```
