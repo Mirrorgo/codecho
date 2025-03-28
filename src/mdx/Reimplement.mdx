@@ -60,19 +60,49 @@ debouncedGreet();
 
 ### throttle
 
+方案 1
+
+```js
+function throttle(fn, limit) {
+  let isThrottle = false;
+  let lastFunc;
+  return function (...args) {
+    const context = this;
+    if (!isThrottle) {
+      fn.apply(context, args);
+      isThrottle = true;
+      setTimeout(() => {
+        isThrottle = false;
+        if (lastFunc) {
+          lastFunc();
+          lastFunc = null;
+        }
+      }, limit);
+    } else {
+      lastFunc = function () {
+        fn.apply(context, args);
+      };
+    }
+  };
+}
+```
+
+方案 2
+
 ```js
 function throttle(func, limit) {
   let lastFunc;
   let lastRan;
   return function (...args) {
+    const context = this;
     if (!lastRan) {
-      func.apply(this, args);
+      func.apply(context, args);
       lastRan = Date.now();
     } else {
       clearTimeout(lastFunc);
       lastFunc = setTimeout(() => {
         if (Date.now() - lastRan >= limit) {
-          func.apply(this, args);
+          func.apply(context, args);
           lastRan = Date.now();
         }
       }, limit - (Date.now() - lastRan));

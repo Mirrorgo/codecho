@@ -30,6 +30,7 @@ function debounce<T extends (...args: any[]) => any>(
  * @param {number} limit 节流时间间隔（毫秒）
  * @returns {(...args: Parameters<T>) => void} 节流处理后的函数
  */
+
 function throttle<T extends (...args: any[]) => any>(
   func: T,
   limit: number
